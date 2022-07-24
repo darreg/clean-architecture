@@ -11,10 +11,12 @@ import (
 
 func main() {
 	var (
-		logger = adapter.NewLogger()
-		router = adapter.NewRouter()
-		flags  = service.GetFlags()
-		config = service.GetConfig(flags, logger)
+		logger          = adapter.NewLogger()
+		router          = adapter.NewRouter()
+		userRepository  = adapter.NewUserRepository()
+		orderRepository = adapter.NewOrderRepository()
+		flags           = service.GetFlags()
+		config          = service.GetConfig(flags, logger)
 	)
 
 	fmt.Println(config.RunAddress)
@@ -23,6 +25,8 @@ func main() {
 		config,
 		logger,
 		router,
+		userRepository,
+		orderRepository,
 	)
 
 	r := a.Router.WithPrefix("/api/user")
