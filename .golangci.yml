@@ -22,7 +22,7 @@ linters:
   disable-all: true
   enable:
     - asciicheck
-    - bodyclose
+#    - bodyclose
     - deadcode
     - depguard
     - dogsled
@@ -52,16 +52,16 @@ linters:
     - makezero
     - misspell
     - nestif
-    - nilerr
-    - noctx
+#    - nilerr
+#    - noctx
     - nolintlint
     - prealloc
     - predeclared
     - revive
-    - rowserrcheck
-    - sqlclosecheck
+#    - rowserrcheck
+#    - sqlclosecheck
     - staticcheck
-    - structcheck
+#    - structcheck
     - stylecheck
 #    - tagliatelle
     - thelper
@@ -70,5 +70,5 @@ linters:
     - unparam
     - unused
     - varcheck
-    - wastedassign
+#    - wastedassign
     - whitespace
