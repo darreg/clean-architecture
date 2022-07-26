@@ -6,11 +6,15 @@ import (
 )
 
 type UserRepository interface {
-	Find(id uuid.UUID) *entity.User
-	FindByLogin(login string) *entity.User
+	Find(userID uuid.UUID) (*entity.User, error)
+	FindByLogin(login string) (*entity.User, error)
+	FindByCredential(login, password string) (*entity.User, error)
+	Create(login, password string) (*entity.User, error)
+	Update(login, password string) (*entity.User, error)
+	Delete(userID uuid.UUID) error
 }
 
 type OrderRepository interface {
-	Find(number string) *entity.Order
-	FindByUser(user entity.User) *entity.Order
+	Find(number string) (*entity.Order, error)
+	FindByUser(user entity.User) (*entity.Order, error)
 }

@@ -6,6 +6,9 @@ type App struct {
 	Config          *Config
 	Logger          port.Logger
 	Router          port.Router
+	Encryption      port.Encryptor
+	Hasher          port.PasswordHasher
+	Cooker          port.Cooker
 	UserRepository  port.UserRepository
 	OrderRepository port.OrderRepository
 }
@@ -14,6 +17,9 @@ func NewApp(
 	config *Config,
 	logger port.Logger,
 	router port.Router,
+	encryption port.Encryptor,
+	hasher port.PasswordHasher,
+	cooker port.Cooker,
 	userRepository port.UserRepository,
 	orderRepository port.OrderRepository,
 ) *App {
@@ -21,6 +27,9 @@ func NewApp(
 		Config:          config,
 		Logger:          logger,
 		Router:          router,
+		Encryption:      encryption,
+		Hasher:          hasher,
+		Cooker:          cooker,
 		UserRepository:  userRepository,
 		OrderRepository: orderRepository,
 	}
