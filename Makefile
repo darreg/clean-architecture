@@ -21,3 +21,9 @@ cover:
 	go test -short -count=1 -race -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 	rm coverage.out
+
+migration-up:
+	migrate -database ${DATABASE_URI} -path migrations up
+
+migration-down:
+	migrate -database ${DATABASE_URI} -path migrations down

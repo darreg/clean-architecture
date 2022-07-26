@@ -5,7 +5,6 @@ import (
 	"errors"
 	"net/http"
 
-
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/domain/port"
