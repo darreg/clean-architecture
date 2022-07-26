@@ -9,8 +9,8 @@ type UserRepository interface {
 	Find(userID uuid.UUID) (*entity.User, error)
 	FindByLogin(login string) (*entity.User, error)
 	FindByCredential(login, password string) (*entity.User, error)
-	Create(login, password string) (*entity.User, error)
-	Update(login, password string) (*entity.User, error)
+	Create(userID uuid.UUID, login, password string) (*entity.User, error)
+	Update(userID uuid.UUID, login, password string) (*entity.User, error)
 	Delete(userID uuid.UUID) error
 }
 

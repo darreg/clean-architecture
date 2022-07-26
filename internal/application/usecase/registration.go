@@ -1,9 +1,12 @@
 package usecase
 
 import (
+	"errors"
 	"net/http"
 
+
 	"github.com/alrund/yp-1-project/internal/domain/port"
+	"github.com/google/uuid"
 )
 
 type RegistrationData struct {
@@ -20,7 +23,7 @@ func Registration(
 	w http.ResponseWriter,
 ) error {
 	user, err := repository.FindByLogin(regData.Login)
-	if err != nil {
+	if err != nil && !errors.Is(err, ErrUserNotFound) {
 		return err
 	}
 
@@ -28,7 +31,7 @@ func Registration(
 		return ErrLoginAlreadyUse
 	}
 
-	user, err = repository.Create(regData.Login, regData.Password)
+	user, err = repository.Create(uuid.New(), regData.Login, regData.Password)
 	if err != nil {
 		return err
 	}
