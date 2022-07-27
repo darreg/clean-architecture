@@ -23,7 +23,7 @@ func LoginHandler(a *app.App) http.Handler {
 			a.Config.SessionCookieName,
 			a.Config.SessionCookieDuration,
 			a.UserRepository,
-			a.Encryption,
+			a.Encryptor,
 			a.Cooker,
 			w,
 		)

@@ -1,6 +1,8 @@
 package app
 
-import "github.com/ilyakaznacheev/cleanenv"
+import (
+	"github.com/alrund/yp-1-project/internal/domain/port"
+)
 
 type Config struct {
 	RunAddress            string `env:"RUN_ADDRESS" env-default:"localhost:3000"`
@@ -11,7 +13,7 @@ type Config struct {
 	SessionCookieName     string `env:"COOKIE_NAME" env-default:"sessionID"`
 }
 
-func NewConfig() (*Config, error) {
+func NewConfig(loader port.ConfigLoader) (*Config, error) {
 	cfg := &Config{}
 
 	flags := NewFlags()
@@ -19,7 +21,7 @@ func NewConfig() (*Config, error) {
 	cfg.DatabaseURI = flags.D
 	cfg.AccrualSystemAddress = flags.R
 
-	if err := cleanenv.ReadEnv(cfg); err != nil {
+	if err := loader.Load(cfg); err != nil {
 		return nil, err
 	}
 

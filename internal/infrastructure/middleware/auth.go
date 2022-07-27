@@ -17,7 +17,7 @@ func Auth(a *app.App) func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			sessionCookieName := ContextKey(a.Config.SessionCookieName)
 
-			userID, err := getCookie(r, a.Encryption, sessionCookieName)
+			userID, err := getCookie(r, a.Encryptor, sessionCookieName)
 			if err != nil && !errors.Is(err, http.ErrNoCookie) {
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}

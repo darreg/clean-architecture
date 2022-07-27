@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-
 	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/google/uuid"
 )
@@ -22,7 +21,7 @@ func Registration(
 	cooker port.Cooker,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.FindByLogin(regData.Login)
+	user, err := repository.GetByLogin(regData.Login)
 	if err != nil && !errors.Is(err, ErrUserNotFound) {
 		return err
 	}
@@ -31,7 +30,7 @@ func Registration(
 		return ErrLoginAlreadyUse
 	}
 
-	user, err = repository.Create(uuid.New(), regData.Login, regData.Password)
+	user, err = repository.Add(uuid.New(), regData.Login, regData.Password)
 	if err != nil {
 		return err
 	}

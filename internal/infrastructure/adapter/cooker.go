@@ -1,17 +1,17 @@
-package service
+package adapter
 
 import (
 	"net/http"
 	"time"
 )
 
-type Cookies struct{}
+type Cooker struct{}
 
-func NewCookies() *Cookies {
-	return &Cookies{}
+func NewCooker() *Cooker {
+	return &Cooker{}
 }
 
-func (c Cookies) ClearCookie(name string, w http.ResponseWriter) {
+func (c Cooker) ClearCookie(name string, w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     name,
 		Value:    "",
@@ -22,7 +22,7 @@ func (c Cookies) ClearCookie(name string, w http.ResponseWriter) {
 	})
 }
 
-func (c Cookies) AddCookie(name, value string, expireTime time.Time, w http.ResponseWriter) {
+func (c Cooker) AddCookie(name, value string, expireTime time.Time, w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     name,
 		Value:    value,
@@ -32,7 +32,7 @@ func (c Cookies) AddCookie(name, value string, expireTime time.Time, w http.Resp
 	})
 }
 
-func (c Cookies) AddCookieWithDuration(name, value, duration string, w http.ResponseWriter) error {
+func (c Cooker) AddCookieWithDuration(name, value, duration string, w http.ResponseWriter) error {
 	expireDuration, err := time.ParseDuration(duration)
 	if err != nil {
 		return err

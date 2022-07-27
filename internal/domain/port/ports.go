@@ -5,6 +5,11 @@ import (
 	"time"
 )
 
+type ConfigLoader interface {
+	Load(cfg interface{}) error
+	LoadFile(path string, cfg interface{}) error
+}
+
 type Logger interface {
 	Debug(msg string)
 	Warn(msg string)

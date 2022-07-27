@@ -19,7 +19,7 @@ func Login(
 	cooker port.Cooker,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.FindByCredential(cred.Login, cred.Password)
+	user, err := repository.GetByCredential(cred.Login, cred.Password)
 	if err != nil {
 		return err
 	}

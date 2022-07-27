@@ -1,4 +1,4 @@
-package service
+package adapter
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var enc = NewEncryption("J53RPX6")
+var enc = NewEncryptor("J53RPX6")
 
 func TestEncrypt(t *testing.T) {
 	tests := []struct {

@@ -1,4 +1,4 @@
-package adapter
+package repository
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ func NewUserRepository(db *sql.DB, hasher port.PasswordHasher) *UserRepository {
 	return &UserRepository{db: db, hasher: hasher}
 }
 
-func (u UserRepository) Find(userID uuid.UUID) (*entity.User, error) {
+func (u UserRepository) Get(userID uuid.UUID) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
@@ -35,7 +35,7 @@ func (u UserRepository) Find(userID uuid.UUID) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u UserRepository) FindByLogin(login string) (*entity.User, error) {
+func (u UserRepository) GetByLogin(login string) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
@@ -51,7 +51,7 @@ func (u UserRepository) FindByLogin(login string) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u UserRepository) FindByCredential(login, password string) (*entity.User, error) {
+func (u UserRepository) GetByCredential(login, password string) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
@@ -67,7 +67,7 @@ func (u UserRepository) FindByCredential(login, password string) (*entity.User, 
 	return &user, nil
 }
 
-func (u UserRepository) Create(userID uuid.UUID, login, password string) (*entity.User, error) {
+func (u UserRepository) Add(userID uuid.UUID, login, password string) (*entity.User, error) {
 	passwordHash := u.hasher.Hash(password)
 
 	_, err := u.db.Exec("INSERT INTO users(ID, login, password) VALUES($1, $2, $3)", userID, login, passwordHash)
@@ -82,7 +82,7 @@ func (u UserRepository) Create(userID uuid.UUID, login, password string) (*entit
 	}, nil
 }
 
-func (u UserRepository) Update(userID uuid.UUID, login, password string) (*entity.User, error) {
+func (u UserRepository) Change(userID uuid.UUID, login, password string) (*entity.User, error) {
 	passwordHash := u.hasher.Hash(password)
 
 	_, err := u.db.Exec("UPDATE users SET login=$1, password=$2 WHERE id =$3", login, passwordHash, userID)
@@ -97,7 +97,7 @@ func (u UserRepository) Update(userID uuid.UUID, login, password string) (*entit
 	}, nil
 }
 
-func (u UserRepository) Delete(userID uuid.UUID) error {
+func (u UserRepository) Remove(userID uuid.UUID) error {
 	_, err := u.db.Exec("DELETE FROM users WHERE id=$1", userID)
 	return err
 }

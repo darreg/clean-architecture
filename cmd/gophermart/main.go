@@ -1,16 +1,13 @@
 package main
 
 import (
-	"errors"
-
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/alrund/yp-1-project/internal/infrastructure/adapter"
 	"github.com/alrund/yp-1-project/internal/infrastructure/handler"
 	"github.com/alrund/yp-1-project/internal/infrastructure/middleware"
+	"github.com/alrund/yp-1-project/internal/infrastructure/repository"
 	"github.com/alrund/yp-1-project/internal/infrastructure/service"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -38,7 +35,7 @@ func routes(a *app.App) {
 }
 
 func builder(logger port.Logger) (*app.App, error) {
-	config, err := app.NewConfig()
+	config, err := app.NewConfig(adapter.NewConfigLoader())
 	if err != nil {
 		return nil, err
 	}
@@ -48,49 +45,23 @@ func builder(logger port.Logger) (*app.App, error) {
 		return nil, err
 	}
 
-	err = migrations(storage)
-	if err != nil {
-		return nil, err
-	}
-
 	var (
-		encryption      = service.NewEncryption(config.CipherPass)
-		hasher          = service.NewPasswordHasher()
 		router          = adapter.NewRouter()
-		cooker          = service.NewCookies()
-		userRepository  = adapter.NewUserRepository(storage.Connect, hasher)
-		orderRepository = adapter.NewOrderRepository(storage.Connect)
+		cooker          = adapter.NewCooker()
+		hasher          = adapter.NewHasher()
+		encryptor       = adapter.NewEncryptor(config.CipherPass)
+		userRepository  = repository.NewUserRepository(storage.Connect, hasher)
+		orderRepository = repository.NewOrderRepository(storage.Connect)
 	)
 
 	return app.NewApp(
 		config,
 		logger,
 		router,
-		encryption,
+		encryptor,
 		hasher,
 		cooker,
 		userRepository,
 		orderRepository,
 	), nil
-}
-
-func migrations(storage *service.Storage) error {
-	driver, err := postgres.WithInstance(storage.Connect, &postgres.Config{})
-	if err != nil {
-		return err
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations",
-		"postgres", driver)
-	if err != nil {
-		return err
-	}
-
-	err = m.Up()
-	if err != nil && !errors.Is(err, migrate.ErrNoChange) {
-		return err
-	}
-
-	return nil
 }

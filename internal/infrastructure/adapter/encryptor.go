@@ -1,4 +1,4 @@
-package service
+package adapter
 
 import (
 	"crypto/aes"
@@ -7,15 +7,15 @@ import (
 	"encoding/hex"
 )
 
-type Encryption struct {
+type Encryptor struct {
 	CipherPass string
 }
 
-func NewEncryption(cipherPass string) *Encryption {
-	return &Encryption{CipherPass: cipherPass}
+func NewEncryptor(cipherPass string) *Encryptor {
+	return &Encryptor{CipherPass: cipherPass}
 }
 
-func (e *Encryption) Encrypt(data string) (string, error) {
+func (e *Encryptor) Encrypt(data string) (string, error) {
 	aesgcm, nonce, err := e.getAesgcm()
 	if err != nil {
 		return "", err
@@ -24,7 +24,7 @@ func (e *Encryption) Encrypt(data string) (string, error) {
 	return hex.EncodeToString(aesgcm.Seal(nil, nonce, []byte(data), nil)), nil
 }
 
-func (e *Encryption) Decrypt(encrypted string) (string, error) {
+func (e *Encryptor) Decrypt(encrypted string) (string, error) {
 	aesgcm, nonce, err := e.getAesgcm()
 	if err != nil {
 		return "", err
@@ -43,7 +43,7 @@ func (e *Encryption) Decrypt(encrypted string) (string, error) {
 	return string(decrypted), nil
 }
 
-func (e *Encryption) getAesgcm() (cipher.AEAD, []byte, error) {
+func (e *Encryptor) getAesgcm() (cipher.AEAD, []byte, error) {
 	key := sha256.Sum256([]byte(e.CipherPass))
 
 	aesblock, err := aes.NewCipher(key[:])
