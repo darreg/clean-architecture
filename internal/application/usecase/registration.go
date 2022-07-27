@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/google/uuid"
 )
@@ -19,6 +20,7 @@ func Registration(
 	repository port.UserRepository,
 	encryptor port.Encryptor,
 	cooker port.Cooker,
+	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
 	user, err := repository.GetByLogin(regData.Login)
@@ -30,7 +32,12 @@ func Registration(
 		return ErrLoginAlreadyUse
 	}
 
-	user, err = repository.Add(uuid.New(), regData.Login, regData.Password)
+	user = &entity.User{
+		ID:           uuid.New(),
+		Login:        regData.Login,
+		PasswordHash: hasher.Hash(regData.Password),
+	}
+	err = repository.Add(user)
 	if err != nil {
 		return err
 	}

@@ -7,7 +7,7 @@ import (
 type Config struct {
 	RunAddress            string `env:"RUN_ADDRESS" env-default:"localhost:3000"`
 	DatabaseURI           string `env:"DATABASE_URI" env-default:"postgres://dev:dev@localhost:5432/dev?sslmode=disable"`
-	AccrualSystemAddress  string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:""`
+	AccrualSystemAddress  string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:"localhost:8080"`
 	CipherPass            string `env:"CIPHER_PASSWORD" env-default:"J53RPX6"`
 	SessionCookieDuration string `env:"COOKIE_DURATION" env-default:"24h"`
 	SessionCookieName     string `env:"COOKIE_NAME" env-default:"sessionID"`

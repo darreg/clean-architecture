@@ -25,6 +25,7 @@ func LoginHandler(a *app.App) http.Handler {
 			a.UserRepository,
 			a.Encryptor,
 			a.Cooker,
+			a.Hasher,
 			w,
 		)
 		if err != nil {
@@ -34,6 +35,8 @@ func LoginHandler(a *app.App) http.Handler {
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
+
+			return
 		}
 
 		a.JSONRespond(w, r, http.StatusOK, "Ok")

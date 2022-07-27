@@ -17,9 +17,10 @@ func Login(
 	repository port.UserRepository,
 	encryptor port.Encryptor,
 	cooker port.Cooker,
+	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.GetByCredential(cred.Login, cred.Password)
+	user, err := repository.GetByCredential(cred.Login, hasher.Hash(cred.Password))
 	if err != nil {
 		return err
 	}

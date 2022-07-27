@@ -6,17 +6,15 @@ import (
 
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/domain/entity"
-	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/google/uuid"
 )
 
 type UserRepository struct {
-	db     *sql.DB
-	hasher port.PasswordHasher
+	db *sql.DB
 }
 
-func NewUserRepository(db *sql.DB, hasher port.PasswordHasher) *UserRepository {
-	return &UserRepository{db: db, hasher: hasher}
+func NewUserRepository(db *sql.DB) *UserRepository {
+	return &UserRepository{db: db}
 }
 
 func (u UserRepository) Get(userID uuid.UUID) (*entity.User, error) {
@@ -51,11 +49,11 @@ func (u UserRepository) GetByLogin(login string) (*entity.User, error) {
 	return &user, nil
 }
 
-func (u UserRepository) GetByCredential(login, password string) (*entity.User, error) {
+func (u UserRepository) GetByCredential(login, passwordHash string) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
-		"SELECT * FROM users WHERE login = $1 AND password=$2", login, u.hasher.Hash(password),
+		"SELECT * FROM users WHERE login = $1 AND password=$2", login, passwordHash,
 	).Scan(&user.ID, &user.Login, &user.PasswordHash)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -67,34 +65,34 @@ func (u UserRepository) GetByCredential(login, password string) (*entity.User, e
 	return &user, nil
 }
 
-func (u UserRepository) Add(userID uuid.UUID, login, password string) (*entity.User, error) {
-	passwordHash := u.hasher.Hash(password)
-
-	_, err := u.db.Exec("INSERT INTO users(ID, login, password) VALUES($1, $2, $3)", userID, login, passwordHash)
+func (u UserRepository) Add(user *entity.User) error {
+	_, err := u.db.Exec(
+		"INSERT INTO users(ID, login, password) VALUES($1, $2, $3)",
+		user.ID, user.Login, user.PasswordHash,
+	)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &entity.User{
-		ID:           userID,
-		Login:        login,
-		PasswordHash: passwordHash,
-	}, nil
+	return nil
 }
 
-func (u UserRepository) Change(userID uuid.UUID, login, password string) (*entity.User, error) {
-	passwordHash := u.hasher.Hash(password)
-
-	_, err := u.db.Exec("UPDATE users SET login=$1, password=$2 WHERE id =$3", login, passwordHash, userID)
+func (u UserRepository) Change(user *entity.User) error {
+	_, err := u.db.Exec("UPDATE users SET login=$2 WHERE id =$1", user.ID, user.Login)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &entity.User{
-		ID:           userID,
-		Login:        login,
-		PasswordHash: passwordHash,
-	}, nil
+	return nil
+}
+
+func (u UserRepository) ChangePassword(user *entity.User) error {
+	_, err := u.db.Exec("UPDATE users SET password=$2 WHERE id =$1", user.ID, user.PasswordHash)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u UserRepository) Remove(userID uuid.UUID) error {

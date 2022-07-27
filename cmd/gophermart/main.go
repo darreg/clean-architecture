@@ -31,6 +31,9 @@ func routes(a *app.App) {
 	r.Post("/register", handler.RegisterHandler(a))
 	r.Post("/login", handler.LoginHandler(a))
 
+	r.Post("/orders", handler.AddOrderHandler(a))
+	r.Get("/orders", handler.OrderListHandler(a))
+
 	r.Use(middleware.Auth(a))
 }
 
@@ -50,7 +53,7 @@ func builder(logger port.Logger) (*app.App, error) {
 		cooker          = adapter.NewCooker()
 		hasher          = adapter.NewHasher()
 		encryptor       = adapter.NewEncryptor(config.CipherPass)
-		userRepository  = repository.NewUserRepository(storage.Connect, hasher)
+		userRepository  = repository.NewUserRepository(storage.Connect)
 		orderRepository = repository.NewOrderRepository(storage.Connect)
 	)
 
