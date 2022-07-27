@@ -15,7 +15,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		contextUserID := r.Context().Value(middleware.ContextKey(a.Config.SessionCookieName))
 		userID, ok := contextUserID.(string)
-		if !ok {
+		if !ok || userID == "" {
 			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 
 			return
