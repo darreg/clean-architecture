@@ -15,6 +15,8 @@ func OrderListHandler(a *app.App) http.Handler {
 		userID, ok := contextUserID.(string)
 		if !ok {
 			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+
+			return
 		}
 
 		orders, err := usecase.OrderList(

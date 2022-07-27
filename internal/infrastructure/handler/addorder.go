@@ -17,11 +17,16 @@ func AddOrderHandler(a *app.App) http.Handler {
 		userID, ok := contextUserID.(string)
 		if !ok {
 			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+
+			return
+
 		}
 
 		b, err := io.ReadAll(r.Body)
 		if err != nil {
 			a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
+
+			return
 		}
 
 		if len(b) == 0 || !hasContentType(r, "text/plain") {
