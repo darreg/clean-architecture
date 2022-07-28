@@ -34,6 +34,7 @@ func routes(a *app.App) {
 	r.Post("/orders", handler.AddOrderHandler(a))
 	r.Get("/orders", handler.OrderListHandler(a))
 
+	r.Use(middleware.RequestLog(a))
 	r.Use(middleware.Auth(a))
 }
 
