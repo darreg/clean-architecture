@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"errors"
-	"strconv"
 	"time"
 
 	"github.com/alrund/yp-1-project/internal/domain/entity"
@@ -39,13 +38,14 @@ func AddOrder(
 		return ErrOrderAlreadyUploadedAnotherUser
 	}
 
-	if !isValidLuhn(number) {
-		return ErrInvalidOrderFormat
+	orderNumber, err := entity.NewOrderNumber(number)
+	if err != nil {
+		return err
 	}
 
 	uploadedAt := time.Now()
 	err = orderRepository.Add(&entity.Order{
-		Number:     number,
+		Number:     *orderNumber,
 		UserID:     user.ID,
 		Status:     entity.New,
 		Accrual:    0,
@@ -56,31 +56,4 @@ func AddOrder(
 	}
 
 	return nil
-}
-
-func isValidLuhn(number string) bool {
-	numberRunes := []rune(number)
-
-	sum, err := strconv.Atoi(string(numberRunes[len(number)-1]))
-	if err != nil {
-		return false
-	}
-	parity := len(number) % 2
-	for i := len(number) - 2; i >= 0; i-- {
-		summand, err := strconv.Atoi(string(numberRunes[i]))
-		if err != nil {
-			return false
-		}
-
-		if i%2 == parity {
-			product := summand * 2
-			if product > 9 {
-				summand = product - 9
-			} else {
-				summand = product
-			}
-		}
-		sum += summand
-	}
-	return (sum % 10) == 0
 }

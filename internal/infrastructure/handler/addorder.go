@@ -7,6 +7,7 @@ import (
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
+	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
 	"github.com/alrund/yp-1-project/internal/infrastructure/middleware"
 )
@@ -46,8 +47,8 @@ func AddOrderHandler(a *app.App) http.Handler {
 				a.Error(w, r, http.StatusOK, usecase.ErrOrderAlreadyUploaded)
 			case errors.Is(err, usecase.ErrOrderAlreadyUploadedAnotherUser):
 				a.Error(w, r, http.StatusConflict, usecase.ErrOrderAlreadyUploadedAnotherUser)
-			case errors.Is(err, usecase.ErrInvalidOrderFormat):
-				a.Error(w, r, http.StatusUnprocessableEntity, usecase.ErrInvalidOrderFormat)
+			case errors.Is(err, entity.ErrInvalidOrderFormat):
+				a.Error(w, r, http.StatusUnprocessableEntity, entity.ErrInvalidOrderFormat)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}

@@ -7,30 +7,13 @@ import (
 	"github.com/google/uuid"
 )
 
-const (
-	New OrderStatus = iota
-	Processing
-	Invalid
-	Processed
-)
-
-type OrderStatus int
-
-func (s OrderStatus) String() string {
-	statuses := [...]string{"NEW", "PROCESSING", "INVALID", "PROCESSED"}
-	if len(statuses) < int(s) {
-		return ""
-	}
-	return statuses[s]
-}
-
 type Order struct {
-	Number      string      `json:"number"`
+	Number      OrderNumber `json:"number"`
 	UserID      uuid.UUID   `json:"-"`
 	Status      OrderStatus `json:"status"`
 	Accrual     int         `json:"accrual,omitempty"`
-	UploadedAt  *time.Time  `json:"uploaded_at" format:"RFC850"`
-	ProcessedAt *time.Time  `json:"processed_at,omitempty" format:"RFC3339"`
+	UploadedAt  *time.Time  `json:"uploaded_at"`
+	ProcessedAt *time.Time  `json:"processed_at,omitempty"`
 }
 
 func (o Order) MarshalJSON() ([]byte, error) {
@@ -43,11 +26,13 @@ func (o Order) MarshalJSON() ([]byte, error) {
 
 	aliasValue := &struct {
 		Alias
+		Number      string `json:"number"`
 		UploadedAt  string `json:"uploaded_at"`
 		ProcessedAt string `json:"processed_at,omitempty"`
 		OrderStatus string `json:"status"`
 	}{
 		Alias:       Alias(o),
+		Number:      o.Number.String(),
 		UploadedAt:  o.UploadedAt.Format(time.RFC3339),
 		ProcessedAt: ProcessedAt,
 		OrderStatus: o.Status.String(),

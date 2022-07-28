@@ -12,6 +12,5 @@ var (
 	ErrOrderNotFound                   = errors.New("order not found")
 	ErrOrderAlreadyUploadedAnotherUser = errors.New("the order number has already been uploaded by another user")
 	ErrOrderAlreadyUploaded            = errors.New("the order number has already been uploaded by this user")
-	ErrInvalidOrderFormat              = errors.New("invalid order number format")
 	ErrLoginAlreadyUse                 = errors.New("the login is already in use")
 )
