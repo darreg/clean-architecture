@@ -6,7 +6,6 @@ import (
 )
 
 func (a *App) Serve() error {
-	a.Logger.Debug("is debug", "addr", a.Config.RunAddress)
 	a.Logger.Info("starting HTTP server", "addr", a.Config.RunAddress)
 	return http.ListenAndServe(a.Config.RunAddress, a.Router)
 }

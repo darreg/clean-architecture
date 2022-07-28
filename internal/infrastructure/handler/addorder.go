@@ -3,11 +3,11 @@ package handler
 import (
 	"errors"
 	"io"
-	"mime"
 	"net/http"
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
+	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
 	"github.com/alrund/yp-1-project/internal/infrastructure/middleware"
 )
 
@@ -28,7 +28,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 			return
 		}
 
-		if len(b) == 0 || !hasContentType(r, "text/plain") {
+		if len(b) == 0 || !helper.HasContentType(r, "text/plain") {
 			a.Error(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
@@ -59,13 +59,4 @@ func AddOrderHandler(a *app.App) http.Handler {
 	}
 
 	return http.HandlerFunc(fn)
-}
-
-func hasContentType(r *http.Request, mimetype string) bool {
-	contentType := r.Header.Get("Content-type")
-	t, _, err := mime.ParseMediaType(contentType)
-	if err == nil && t == mimetype {
-		return true
-	}
-	return false
 }
