@@ -13,7 +13,7 @@ func LoginHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		var cred usecase.Credential
 		if err := json.NewDecoder(r.Body).Decode(&cred); err != nil {
-			a.Error(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
+			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
 		}
@@ -31,7 +31,7 @@ func LoginHandler(a *app.App) http.Handler {
 		if err != nil {
 			switch {
 			case errors.Is(err, usecase.ErrUserNotFound):
-				a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+				a.Warn(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
@@ -39,7 +39,7 @@ func LoginHandler(a *app.App) http.Handler {
 			return
 		}
 
-		a.JSONRespond(w, r, http.StatusOK, "Ok")
+		a.PlainRespond(w, r, http.StatusOK, []byte(http.StatusText(http.StatusOK)))
 	}
 
 	return http.HandlerFunc(fn)

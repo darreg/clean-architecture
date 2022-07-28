@@ -10,10 +10,16 @@ func (a *App) Serve() error {
 	return http.ListenAndServe(a.Config.RunAddress, a.Router)
 }
 
+func (a *App) Warn(w http.ResponseWriter, r *http.Request, code int, err error) {
+	a.Logger.Warn(err.Error())
+
+	a.PlainRespond(w, r, code, []byte(err.Error()))
+}
+
 func (a *App) Error(w http.ResponseWriter, r *http.Request, code int, err error) {
 	a.Logger.Error(err)
 
-	a.JSONRespond(w, r, code, map[string]string{"error": err.Error()})
+	a.PlainRespond(w, r, code, []byte(err.Error()))
 }
 
 func (a *App) PlainRespond(w http.ResponseWriter, r *http.Request, code int, data []byte) {

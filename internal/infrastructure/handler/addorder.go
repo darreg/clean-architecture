@@ -17,7 +17,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 		contextUserID := r.Context().Value(middleware.ContextKey(a.Config.SessionCookieName))
 		userID, ok := contextUserID.(string)
 		if !ok || userID == "" {
-			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+			a.Warn(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 
 			return
 		}
@@ -30,7 +30,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 		}
 
 		if len(b) == 0 || !helper.HasContentType(r, "text/plain") {
-			a.Error(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
+			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
 		}
@@ -44,11 +44,11 @@ func AddOrderHandler(a *app.App) http.Handler {
 		if err != nil {
 			switch {
 			case errors.Is(err, usecase.ErrOrderAlreadyUploaded):
-				a.Error(w, r, http.StatusOK, usecase.ErrOrderAlreadyUploaded)
+				a.Warn(w, r, http.StatusOK, usecase.ErrOrderAlreadyUploaded)
 			case errors.Is(err, usecase.ErrOrderAlreadyUploadedAnotherUser):
-				a.Error(w, r, http.StatusConflict, usecase.ErrOrderAlreadyUploadedAnotherUser)
+				a.Warn(w, r, http.StatusConflict, usecase.ErrOrderAlreadyUploadedAnotherUser)
 			case errors.Is(err, entity.ErrInvalidOrderFormat):
-				a.Error(w, r, http.StatusUnprocessableEntity, entity.ErrInvalidOrderFormat)
+				a.Warn(w, r, http.StatusUnprocessableEntity, entity.ErrInvalidOrderFormat)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
@@ -56,7 +56,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 			return
 		}
 
-		a.JSONRespond(w, r, http.StatusAccepted, "Accepted")
+		a.PlainRespond(w, r, http.StatusAccepted, []byte(http.StatusText(http.StatusAccepted)))
 	}
 
 	return http.HandlerFunc(fn)

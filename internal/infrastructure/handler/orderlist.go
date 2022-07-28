@@ -14,7 +14,7 @@ func OrderListHandler(a *app.App) http.Handler {
 		contextUserID := r.Context().Value(middleware.ContextKey(a.Config.SessionCookieName))
 		userID, ok := contextUserID.(string)
 		if !ok || userID == "" {
-			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+			a.Warn(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 
 			return
 		}
@@ -27,7 +27,7 @@ func OrderListHandler(a *app.App) http.Handler {
 		if err != nil {
 			switch {
 			case errors.Is(err, usecase.ErrOrderNotFound):
-				a.Error(w, r, http.StatusNoContent, usecase.ErrOrderNotFound)
+				a.Warn(w, r, http.StatusNoContent, usecase.ErrOrderNotFound)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}

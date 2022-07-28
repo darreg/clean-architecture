@@ -13,7 +13,7 @@ func RegisterHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		var regData usecase.RegistrationData
 		if err := json.NewDecoder(r.Body).Decode(&regData); err != nil {
-			a.Error(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
+			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
 		}
@@ -31,7 +31,7 @@ func RegisterHandler(a *app.App) http.Handler {
 		if err != nil {
 			switch {
 			case errors.Is(err, usecase.ErrLoginAlreadyUse):
-				a.Error(w, r, http.StatusConflict, usecase.ErrLoginAlreadyUse)
+				a.Warn(w, r, http.StatusConflict, usecase.ErrLoginAlreadyUse)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
@@ -39,7 +39,7 @@ func RegisterHandler(a *app.App) http.Handler {
 			return
 		}
 
-		a.JSONRespond(w, r, http.StatusOK, "Ok")
+		a.PlainRespond(w, r, http.StatusOK, []byte(http.StatusText(http.StatusOK)))
 	}
 
 	return http.HandlerFunc(fn)
