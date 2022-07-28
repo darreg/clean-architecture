@@ -19,7 +19,6 @@ func AddOrderHandler(a *app.App) http.Handler {
 			a.Error(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 
 			return
-
 		}
 
 		b, err := io.ReadAll(r.Body)

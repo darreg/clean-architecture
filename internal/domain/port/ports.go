@@ -11,11 +11,12 @@ type ConfigLoader interface {
 }
 
 type Logger interface {
-	Debug(msg string)
-	Warn(msg string)
-	Info(msg string)
-	Error(err error)
-	Fatal(err error)
+	EnableDebug() error
+	Debug(msg string, args ...any)
+	Warn(msg string, args ...any)
+	Info(msg string, args ...any)
+	Error(err error, args ...any)
+	Fatal(err error, args ...any)
 }
 
 type Router interface {

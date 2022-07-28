@@ -43,6 +43,13 @@ func builder(logger port.Logger) (*app.App, error) {
 		return nil, err
 	}
 
+	if config.Debug {
+		err = logger.EnableDebug()
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	storage, err := service.NewStorage(config.DatabaseURI)
 	if err != nil {
 		return nil, err

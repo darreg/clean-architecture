@@ -5,6 +5,7 @@ import (
 )
 
 type Config struct {
+	Debug                 bool   `env-default:"false"`
 	RunAddress            string `env:"RUN_ADDRESS" env-default:"localhost:3000"`
 	DatabaseURI           string `env:"DATABASE_URI" env-default:"postgres://dev:dev@localhost:5432/dev?sslmode=disable"`
 	AccrualSystemAddress  string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:"localhost:8080"`
@@ -17,6 +18,7 @@ func NewConfig(loader port.ConfigLoader) (*Config, error) {
 	cfg := &Config{}
 
 	flags := NewFlags()
+	cfg.Debug = flags.Debug
 	cfg.RunAddress = flags.A
 	cfg.DatabaseURI = flags.D
 	cfg.AccrualSystemAddress = flags.R
