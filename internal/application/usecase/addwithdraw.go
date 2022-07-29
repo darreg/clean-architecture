@@ -38,12 +38,24 @@ func AddWithdraw(
 	}
 
 	processedAt := time.Now()
-	err = withdrawRepository.Add(ctx, &entity.Withdraw{
-		ID:          uuid.New(),
-		OrderNumber: order.Number,
-		UserID:      user.ID,
-		Sum:         sum,
-		ProcessedAt: &processedAt,
+	err = withdrawRepository.WithinTransaction(ctx, func(txCtx context.Context) error {
+		err := withdrawRepository.Add(txCtx, &entity.Withdraw{
+			ID:          uuid.New(),
+			OrderNumber: order.Number,
+			UserID:      user.ID,
+			Sum:         sum,
+			ProcessedAt: &processedAt,
+		})
+		if err != nil {
+			return err
+		}
+
+		err = userRepository.Withdraw(txCtx, user, sum)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	})
 	if err != nil {
 		return err

@@ -20,6 +20,10 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
+func (u UserRepository) WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error {
+	return u.InTransaction(ctx, u.db, tFunc)
+}
+
 func (u UserRepository) Get(ctx context.Context, userID uuid.UUID) (*entity.User, error) {
 	var user entity.User
 
@@ -66,6 +70,17 @@ func (u UserRepository) GetByCredential(ctx context.Context, login, passwordHash
 	}
 
 	return &user, nil
+}
+
+func (u UserRepository) Withdraw(ctx context.Context, user *entity.User, sum int) error {
+	_, err := u.ExecContext(ctx, u.db,
+		"UPDATE users SET current=current-$2 WHERE id=$1", user.ID, sum,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u UserRepository) Add(ctx context.Context, user *entity.User) error {

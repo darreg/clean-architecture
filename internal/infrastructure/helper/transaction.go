@@ -10,7 +10,7 @@ type txKey struct{}
 
 type Transaction struct{}
 
-func (t Transaction) WithinTransaction(ctx context.Context, db *sql.DB, tFunc func(ctx context.Context) error) error {
+func (t Transaction) InTransaction(ctx context.Context, db *sql.DB, tFunc func(ctx context.Context) error) error {
 	tx, err := db.Begin()
 	if err != nil {
 		return fmt.Errorf("begin transaction: %w", err)

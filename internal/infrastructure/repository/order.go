@@ -20,6 +20,10 @@ func NewOrderRepository(db *sql.DB) *OrderRepository {
 	return &OrderRepository{db: db}
 }
 
+func (o OrderRepository) WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error {
+	return o.InTransaction(ctx, o.db, tFunc)
+}
+
 func (o OrderRepository) Get(ctx context.Context, number string) (*entity.Order, error) {
 	var order entity.Order
 	var uploadedAt time.Time

@@ -21,6 +21,10 @@ func NewWithdrawRepository(db *sql.DB) *WithdrawRepository {
 	return &WithdrawRepository{db: db}
 }
 
+func (w WithdrawRepository) WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error {
+	return w.InTransaction(ctx, w.db, tFunc)
+}
+
 func (w WithdrawRepository) Get(ctx context.Context, withdrawID uuid.UUID) (*entity.Withdraw, error) {
 	var withdraw entity.Withdraw
 	var processedAt time.Time

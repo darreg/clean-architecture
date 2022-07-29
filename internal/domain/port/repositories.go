@@ -9,7 +9,7 @@ import (
 )
 
 type Transactor interface {
-	WithinTransaction(ctx context.Context, db *sql.DB, tFunc func(ctx context.Context) error) error
+	WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error
 	QueryContext(ctx context.Context, db *sql.DB, query string, args ...any) (*sql.Rows, error)
 	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...any) *sql.Row
 	ExecContext(ctx context.Context, db *sql.DB, query string, args ...any) (sql.Result, error)
@@ -21,6 +21,7 @@ type UserRepository interface {
 	GetByLogin(ctx context.Context, login string) (*entity.User, error)
 	GetByCredential(ctx context.Context, login, passwordHash string) (*entity.User, error)
 	Add(ctx context.Context, user *entity.User) error
+	Withdraw(ctx context.Context, user *entity.User, sum int) error
 	Change(ctx context.Context, user *entity.User) error
 	ChangePassword(ctx context.Context, user *entity.User) error
 	Remove(ctx context.Context, userID uuid.UUID) error
