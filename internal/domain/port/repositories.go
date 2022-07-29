@@ -2,11 +2,21 @@ package port
 
 import (
 	"context"
+	"database/sql"
+
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/google/uuid"
 )
 
+type Transactor interface {
+	WithinTransaction(ctx context.Context, db *sql.DB, tFunc func(ctx context.Context) error) error
+	QueryContext(ctx context.Context, db *sql.DB, query string, args ...any) (*sql.Rows, error)
+	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...any) *sql.Row
+	ExecContext(ctx context.Context, db *sql.DB, query string, args ...any) (sql.Result, error)
+}
+
 type UserRepository interface {
+	Transactor
 	Get(ctx context.Context, userID uuid.UUID) (*entity.User, error)
 	GetByLogin(ctx context.Context, login string) (*entity.User, error)
 	GetByCredential(ctx context.Context, login, passwordHash string) (*entity.User, error)
@@ -17,6 +27,7 @@ type UserRepository interface {
 }
 
 type OrderRepository interface {
+	Transactor
 	Get(ctx context.Context, number string) (*entity.Order, error)
 	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error)
 	Add(ctx context.Context, order *entity.Order) error
@@ -25,6 +36,7 @@ type OrderRepository interface {
 }
 
 type WithdrawRepository interface {
+	Transactor
 	Get(ctx context.Context, withdrawID uuid.UUID) (*entity.Withdraw, error)
 	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error)
 	Add(ctx context.Context, order *entity.Withdraw) error
