@@ -36,6 +36,7 @@ func routes(a *app.App) {
 
 	r.Get("/withdrawals", handler.WithdrawListHandler(a))
 	r.Post("/balance/withdraw", handler.AddWithdrawHandler(a))
+	r.Get("/balance", handler.BalanceHandler(a))
 
 	r.Use(middleware.RequestLog(a))
 	r.Use(middleware.Auth(a))

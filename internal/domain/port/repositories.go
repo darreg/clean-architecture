@@ -39,6 +39,7 @@ type OrderRepository interface {
 type WithdrawRepository interface {
 	Transactor
 	Get(ctx context.Context, withdrawID uuid.UUID) (*entity.Withdraw, error)
+	GetWithdrawn(ctx context.Context, user *entity.User) (int, error)
 	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error)
 	Add(ctx context.Context, order *entity.Withdraw) error
 	Change(ctx context.Context, order *entity.Withdraw) error
