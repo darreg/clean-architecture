@@ -7,10 +7,17 @@ import (
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
+	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
 )
 
 func LoginHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
+		if !helper.HasContentType(r, "application/json") {
+			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
+
+			return
+		}
+
 		var cred usecase.Credential
 		if err := json.NewDecoder(r.Body).Decode(&cred); err != nil {
 			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)

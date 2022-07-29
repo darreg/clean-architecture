@@ -34,6 +34,9 @@ func routes(a *app.App) {
 	r.Post("/orders", handler.AddOrderHandler(a))
 	r.Get("/orders", handler.OrderListHandler(a))
 
+	r.Get("/withdrawals", handler.WithdrawListHandler(a))
+	r.Post("/balance/withdraw", handler.AddWithdrawHandler(a))
+
 	r.Use(middleware.RequestLog(a))
 	r.Use(middleware.Auth(a))
 }
@@ -57,12 +60,13 @@ func builder(logger port.Logger) (*app.App, error) {
 	}
 
 	var (
-		router          = adapter.NewRouter()
-		cooker          = adapter.NewCooker()
-		hasher          = adapter.NewHasher()
-		encryptor       = adapter.NewEncryptor(config.CipherPass)
-		userRepository  = repository.NewUserRepository(storage.Connect)
-		orderRepository = repository.NewOrderRepository(storage.Connect)
+		router             = adapter.NewRouter()
+		cooker             = adapter.NewCooker()
+		hasher             = adapter.NewHasher()
+		encryptor          = adapter.NewEncryptor(config.CipherPass)
+		userRepository     = repository.NewUserRepository(storage.Connect)
+		orderRepository    = repository.NewOrderRepository(storage.Connect)
+		withdrawRepository = repository.NewWithdrawRepository(storage.Connect)
 	)
 
 	return app.NewApp(
@@ -74,5 +78,6 @@ func builder(logger port.Logger) (*app.App, error) {
 		cooker,
 		userRepository,
 		orderRepository,
+		withdrawRepository,
 	), nil
 }

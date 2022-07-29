@@ -6,6 +6,7 @@ type User struct {
 	ID           uuid.UUID
 	Login        string
 	PasswordHash string
+	Current      int
 }
 
 func NewUser(login, passwordHash string) *User {

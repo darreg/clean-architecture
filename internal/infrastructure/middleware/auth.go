@@ -10,12 +10,10 @@ import (
 	"github.com/alrund/yp-1-project/internal/domain/port"
 )
 
-type ContextKey string
-
 func Auth(a *app.App) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			sessionCookieName := ContextKey(a.Config.SessionCookieName)
+			sessionCookieName := app.SessionContextKey(a.Config.SessionCookieName)
 
 			userID, err := getCookie(r, a.Encryptor, sessionCookieName)
 			if err != nil && !errors.Is(err, http.ErrNoCookie) {
@@ -28,7 +26,7 @@ func Auth(a *app.App) func(next http.Handler) http.Handler {
 	}
 }
 
-func getCookie(r *http.Request, enc port.Encryptor, sessionCookieName ContextKey) (string, error) {
+func getCookie(r *http.Request, enc port.Encryptor, sessionCookieName app.SessionContextKey) (string, error) {
 	sessionCookie, err := r.Cookie(string(sessionCookieName))
 	if err != nil {
 		return "", err

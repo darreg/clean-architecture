@@ -3,11 +3,25 @@ package app
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/alrund/yp-1-project/internal/application/usecase"
 )
+
+type SessionContextKey string
 
 func (a *App) Serve() error {
 	a.Logger.Info("starting HTTP server", "addr", a.Config.RunAddress)
 	return http.ListenAndServe(a.Config.RunAddress, a.Router)
+}
+
+func (a *App) AuthRequired(r *http.Request) (string, error) {
+	contextUserID := r.Context().Value(SessionContextKey(a.Config.SessionCookieName))
+	userID, ok := contextUserID.(string)
+	if !ok || userID == "" {
+		return "", usecase.ErrNotAuthenticated
+	}
+
+	return userID, nil
 }
 
 func (a *App) Warn(w http.ResponseWriter, r *http.Request, code int, err error) {

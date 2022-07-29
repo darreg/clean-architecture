@@ -3,14 +3,15 @@ package app
 import "github.com/alrund/yp-1-project/internal/domain/port"
 
 type App struct {
-	Config          *Config
-	Logger          port.Logger
-	Router          port.Router
-	Encryptor       port.Encryptor
-	Hasher          port.PasswordHasher
-	Cooker          port.Cooker
-	UserRepository  port.UserRepository
-	OrderRepository port.OrderRepository
+	Config             *Config
+	Logger             port.Logger
+	Router             port.Router
+	Encryptor          port.Encryptor
+	Hasher             port.PasswordHasher
+	Cooker             port.Cooker
+	UserRepository     port.UserRepository
+	OrderRepository    port.OrderRepository
+	WithdrawRepository port.WithdrawRepository
 }
 
 func NewApp(
@@ -22,16 +23,18 @@ func NewApp(
 	cooker port.Cooker,
 	userRepository port.UserRepository,
 	orderRepository port.OrderRepository,
+	withRepository port.WithdrawRepository,
 ) *App {
 	return &App{
-		Config:          config,
-		Logger:          logger,
-		Router:          router,
-		Encryptor:       encryptor,
-		Hasher:          hasher,
-		Cooker:          cooker,
-		UserRepository:  userRepository,
-		OrderRepository: orderRepository,
+		Config:             config,
+		Logger:             logger,
+		Router:             router,
+		Encryptor:          encryptor,
+		Hasher:             hasher,
+		Cooker:             cooker,
+		UserRepository:     userRepository,
+		OrderRepository:    orderRepository,
+		WithdrawRepository: withRepository,
 	}
 }
 

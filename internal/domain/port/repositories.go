@@ -22,3 +22,11 @@ type OrderRepository interface {
 	Change(order *entity.Order) error
 	Remove(number string) error
 }
+
+type WithdrawRepository interface {
+	Get(withdrawID uuid.UUID) (*entity.Withdraw, error)
+	GetAllByUser(user *entity.User) ([]*entity.Withdraw, error)
+	Add(order *entity.Withdraw) error
+	Change(order *entity.Withdraw) error
+	Remove(withdrawID uuid.UUID) error
+}

@@ -8,7 +8,7 @@ import (
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 )
 
-func OrderListHandler(a *app.App) http.Handler {
+func WithdrawListHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		userID, err := a.AuthRequired(r)
 		if err != nil {
@@ -17,15 +17,15 @@ func OrderListHandler(a *app.App) http.Handler {
 			return
 		}
 
-		orders, err := usecase.OrderList(
+		orders, err := usecase.WithdrawList(
 			userID,
-			a.OrderRepository,
+			a.WithdrawRepository,
 			a.UserRepository,
 		)
 		if err != nil {
 			switch {
-			case errors.Is(err, usecase.ErrOrderNotFound):
-				a.Warn(w, r, http.StatusNoContent, usecase.ErrOrderNotFound)
+			case errors.Is(err, usecase.ErrWithdrawNotFound):
+				a.Warn(w, r, http.StatusNoContent, usecase.ErrWithdrawNotFound)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}

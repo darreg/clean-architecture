@@ -9,14 +9,12 @@ import (
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
-	"github.com/alrund/yp-1-project/internal/infrastructure/middleware"
 )
 
 func AddOrderHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		contextUserID := r.Context().Value(middleware.ContextKey(a.Config.SessionCookieName))
-		userID, ok := contextUserID.(string)
-		if !ok || userID == "" {
+		userID, err := a.AuthRequired(r)
+		if err != nil {
 			a.Warn(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
 
 			return

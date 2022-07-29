@@ -21,8 +21,8 @@ func (u UserRepository) Get(userID uuid.UUID) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
-		"SELECT * FROM users WHERE id = $1", userID,
-	).Scan(&user.ID, &user.Login, &user.PasswordHash)
+		"SELECT id, login, password, current FROM users WHERE id = $1", userID,
+	).Scan(&user.ID, &user.Login, &user.PasswordHash, &user.Current)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, usecase.ErrUserNotFound
@@ -37,8 +37,8 @@ func (u UserRepository) GetByLogin(login string) (*entity.User, error) {
 	var user entity.User
 
 	err := u.db.QueryRow(
-		"SELECT * FROM users WHERE login = $1", login,
-	).Scan(&user.ID, &user.Login, &user.PasswordHash)
+		"SELECT id, login, password, current FROM users WHERE login = $1", login,
+	).Scan(&user.ID, &user.Login, &user.PasswordHash, &user.Current)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, usecase.ErrUserNotFound
@@ -53,8 +53,8 @@ func (u UserRepository) GetByCredential(login, passwordHash string) (*entity.Use
 	var user entity.User
 
 	err := u.db.QueryRow(
-		"SELECT * FROM users WHERE login = $1 AND password=$2", login, passwordHash,
-	).Scan(&user.ID, &user.Login, &user.PasswordHash)
+		"SELECT id, login, password, current FROM users WHERE login = $1 AND password=$2", login, passwordHash,
+	).Scan(&user.ID, &user.Login, &user.PasswordHash, &user.Current)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, usecase.ErrUserNotFound
@@ -78,7 +78,7 @@ func (u UserRepository) Add(user *entity.User) error {
 }
 
 func (u UserRepository) Change(user *entity.User) error {
-	_, err := u.db.Exec("UPDATE users SET login=$2 WHERE id =$1", user.ID, user.Login)
+	_, err := u.db.Exec("UPDATE users SET login=$2, current=$3 WHERE id=$1", user.ID, user.Login, user.Current)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (u UserRepository) Change(user *entity.User) error {
 }
 
 func (u UserRepository) ChangePassword(user *entity.User) error {
-	_, err := u.db.Exec("UPDATE users SET password=$2 WHERE id =$1", user.ID, user.PasswordHash)
+	_, err := u.db.Exec("UPDATE users SET password=$2 WHERE id=$1", user.ID, user.PasswordHash)
 	if err != nil {
 		return err
 	}

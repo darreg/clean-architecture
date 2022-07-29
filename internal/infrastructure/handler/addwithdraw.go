@@ -10,35 +10,47 @@ import (
 	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
 )
 
-func RegisterHandler(a *app.App) http.Handler {
+type WithdrawRequest struct {
+	Order string
+	Sum   int
+}
+
+func AddWithdrawHandler(a *app.App) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
+		userID, err := a.AuthRequired(r)
+		if err != nil {
+			a.Warn(w, r, http.StatusUnauthorized, usecase.ErrNotAuthenticated)
+
+			return
+		}
+
 		if !helper.HasContentType(r, "application/json") {
 			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
 		}
 
-		var regData usecase.RegistrationData
-		if err := json.NewDecoder(r.Body).Decode(&regData); err != nil {
+		var withdrawRequest WithdrawRequest
+		if err := json.NewDecoder(r.Body).Decode(&withdrawRequest); err != nil {
 			a.Warn(w, r, http.StatusBadRequest, usecase.ErrInvalidRequestFormat)
 
 			return
 		}
 
-		err := usecase.Registration(
-			regData,
-			a.Config.SessionCookieName,
-			a.Config.SessionCookieDuration,
+		err = usecase.AddWithdraw(
+			withdrawRequest.Order,
+			withdrawRequest.Sum,
+			userID,
+			a.OrderRepository,
 			a.UserRepository,
-			a.Encryptor,
-			a.Cooker,
-			a.Hasher,
-			w,
+			a.WithdrawRepository,
 		)
 		if err != nil {
 			switch {
-			case errors.Is(err, usecase.ErrLoginAlreadyUse):
-				a.Warn(w, r, http.StatusConflict, usecase.ErrLoginAlreadyUse)
+			case errors.Is(err, usecase.ErrOrderNotFound):
+				a.Warn(w, r, http.StatusUnprocessableEntity, usecase.ErrInvalidOrderNumber)
+			case errors.Is(err, usecase.ErrNotEnoughFunds):
+				a.Warn(w, r, http.StatusPaymentRequired, usecase.ErrNotEnoughFunds)
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
