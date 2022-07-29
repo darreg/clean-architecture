@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/alrund/yp-1-project/internal/domain/port"
@@ -12,6 +13,7 @@ type Credential struct {
 }
 
 func Login(
+	ctx context.Context,
 	cred Credential,
 	sessionCookieName, sessionCookieDuration string,
 	repository port.UserRepository,
@@ -20,7 +22,7 @@ func Login(
 	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.GetByCredential(cred.Login, hasher.Hash(cred.Password))
+	user, err := repository.GetByCredential(ctx, cred.Login, hasher.Hash(cred.Password))
 	if err != nil {
 		return err
 	}

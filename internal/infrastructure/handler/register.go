@@ -26,6 +26,7 @@ func RegisterHandler(a *app.App) http.Handler {
 		}
 
 		err := usecase.Registration(
+			r.Context(),
 			regData,
 			a.Config.SessionCookieName,
 			a.Config.SessionCookieDuration,

@@ -1,12 +1,14 @@
 package usecase
 
 import (
+	"context"
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/google/uuid"
 )
 
 func WithdrawList(
+	ctx context.Context,
 	userID string,
 	withdrawRepository port.WithdrawRepository,
 	userRepository port.UserRepository,
@@ -16,12 +18,12 @@ func WithdrawList(
 		return nil, err
 	}
 
-	user, err := userRepository.Get(userUUID)
+	user, err := userRepository.Get(ctx, userUUID)
 	if err != nil {
 		return nil, err
 	}
 
-	withdraws, err := withdrawRepository.GetAllByUser(user)
+	withdraws, err := withdrawRepository.GetAllByUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}

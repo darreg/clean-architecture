@@ -18,6 +18,7 @@ func WithdrawListHandler(a *app.App) http.Handler {
 		}
 
 		orders, err := usecase.WithdrawList(
+			r.Context(),
 			userID,
 			a.WithdrawRepository,
 			a.UserRepository,

@@ -26,6 +26,7 @@ func LoginHandler(a *app.App) http.Handler {
 		}
 
 		err := usecase.Login(
+			r.Context(),
 			cred,
 			a.Config.SessionCookieName,
 			a.Config.SessionCookieDuration,

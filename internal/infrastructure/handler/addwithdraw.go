@@ -38,6 +38,7 @@ func AddWithdrawHandler(a *app.App) http.Handler {
 		}
 
 		err = usecase.AddWithdraw(
+			r.Context(),
 			withdrawRequest.Order,
 			withdrawRequest.Sum,
 			userID,

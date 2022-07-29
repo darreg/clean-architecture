@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"time"
 
 	"github.com/alrund/yp-1-project/internal/domain/entity"
@@ -9,6 +10,7 @@ import (
 )
 
 func AddWithdraw(
+	ctx context.Context,
 	number string,
 	sum int,
 	userID string,
@@ -21,12 +23,12 @@ func AddWithdraw(
 		return err
 	}
 
-	user, err := userRepository.Get(userUUID)
+	user, err := userRepository.Get(ctx, userUUID)
 	if err != nil {
 		return err
 	}
 
-	order, err := orderRepository.Get(number)
+	order, err := orderRepository.Get(ctx, number)
 	if err != nil {
 		return err
 	}
@@ -36,7 +38,7 @@ func AddWithdraw(
 	}
 
 	processedAt := time.Now()
-	err = withdrawRepository.Add(&entity.Withdraw{
+	err = withdrawRepository.Add(ctx, &entity.Withdraw{
 		ID:          uuid.New(),
 		OrderNumber: order.Number,
 		UserID:      user.ID,

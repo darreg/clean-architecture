@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -15,6 +16,7 @@ type RegistrationData struct {
 }
 
 func Registration(
+	ctx context.Context,
 	regData RegistrationData,
 	sessionCookieName, sessionCookieDuration string,
 	repository port.UserRepository,
@@ -23,7 +25,7 @@ func Registration(
 	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.GetByLogin(regData.Login)
+	user, err := repository.GetByLogin(ctx, regData.Login)
 	if err != nil && !errors.Is(err, ErrUserNotFound) {
 		return err
 	}
@@ -37,7 +39,7 @@ func Registration(
 		Login:        regData.Login,
 		PasswordHash: hasher.Hash(regData.Password),
 	}
-	err = repository.Add(user)
+	err = repository.Add(ctx, user)
 	if err != nil {
 		return err
 	}

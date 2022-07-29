@@ -34,6 +34,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 		}
 
 		err = usecase.AddOrder(
+			r.Context(),
 			string(b),
 			userID,
 			a.OrderRepository,

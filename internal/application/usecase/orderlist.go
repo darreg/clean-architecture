@@ -1,12 +1,14 @@
 package usecase
 
 import (
+	"context"
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/google/uuid"
 )
 
 func OrderList(
+	ctx context.Context,
 	userID string,
 	orderRepository port.OrderRepository,
 	userRepository port.UserRepository,
@@ -16,12 +18,12 @@ func OrderList(
 		return nil, err
 	}
 
-	user, err := userRepository.Get(userUUID)
+	user, err := userRepository.Get(ctx, userUUID)
 	if err != nil {
 		return nil, err
 	}
 
-	orders, err := orderRepository.GetAllByUser(user)
+	orders, err := orderRepository.GetAllByUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}

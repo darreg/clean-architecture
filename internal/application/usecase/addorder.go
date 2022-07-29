@@ -1,6 +1,7 @@
 package usecase
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 )
 
 func AddOrder(
+	ctx context.Context,
 	number string,
 	userID string,
 	orderRepository port.OrderRepository,
@@ -20,12 +22,12 @@ func AddOrder(
 		return err
 	}
 
-	user, err := userRepository.Get(userUUID)
+	user, err := userRepository.Get(ctx, userUUID)
 	if err != nil {
 		return err
 	}
 
-	order, err := orderRepository.Get(number)
+	order, err := orderRepository.Get(ctx, number)
 	if err != nil && !errors.Is(err, ErrOrderNotFound) {
 		return err
 	}
@@ -44,7 +46,7 @@ func AddOrder(
 	}
 
 	uploadedAt := time.Now()
-	err = orderRepository.Add(&entity.Order{
+	err = orderRepository.Add(ctx, &entity.Order{
 		Number:     *orderNumber,
 		UserID:     user.ID,
 		Status:     entity.New,
