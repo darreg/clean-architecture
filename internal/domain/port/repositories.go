@@ -10,9 +10,9 @@ import (
 
 type Transactor interface {
 	WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error
-	QueryContext(ctx context.Context, db *sql.DB, query string, args ...any) (*sql.Rows, error)
-	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...any) *sql.Row
-	ExecContext(ctx context.Context, db *sql.DB, query string, args ...any) (sql.Result, error)
+	QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error)
+	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row
+	ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error)
 }
 
 type UserRepository interface {
