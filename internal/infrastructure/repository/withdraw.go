@@ -45,7 +45,7 @@ func (w WithdrawRepository) Get(ctx context.Context, withdrawID uuid.UUID) (*ent
 }
 
 func (w WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User) (float32, error) {
-	var withdrawn float32
+	var withdrawn sql.NullFloat64
 
 	err := w.QueryRowContext(ctx, w.db,
 		"SELECT SUM(sum) as withdrawn FROM withdraws WHERE user_id = $1", user.ID,
@@ -54,7 +54,11 @@ func (w WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User)
 		return 0, err
 	}
 
-	return withdrawn, nil
+	if !withdrawn.Valid {
+		return 0, nil
+	}
+
+	return float32(withdrawn.Float64), nil
 }
 
 func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error) {
