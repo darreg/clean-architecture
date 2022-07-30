@@ -21,7 +21,7 @@ func AccrualProcess(
 		}
 
 		order.Status = accrualResult.Status
-		if accrualResult.Status == entity.Processed && order.Accrual > 0 {
+		if accrualResult.Status == entity.Processed && accrualResult.Accrual > 0 {
 			order.Accrual += accrualResult.Accrual
 			err = userRepository.Accrual(txCtx, user, accrualResult.Accrual)
 			if err != nil {

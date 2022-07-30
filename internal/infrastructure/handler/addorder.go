@@ -1,11 +1,10 @@
 package handler
 
 import (
-	"context"
 	"errors"
 	"io"
 	"net/http"
-	"time"
+	"sync"
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
@@ -59,18 +58,22 @@ func AddOrderHandler(a *app.App) http.Handler {
 			return
 		}
 
-		ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
-		defer cancel()
-
-		go usecase.Accrual(
-			ctx,
-			number, userID, a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod,
-			a.UserRepository,
-			a.OrderRepository,
-			a.Logger,
-		)
-
 		a.PlainRespond(w, r, http.StatusAccepted, []byte(http.StatusText(http.StatusAccepted)))
+
+		wg := &sync.WaitGroup{}
+		wg.Add(1)
+		go func(wg *sync.WaitGroup) {
+			usecase.Accrual(
+				r.Context(),
+				number, userID, a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod,
+				a.UserRepository,
+				a.OrderRepository,
+				a.Logger,
+			)
+			wg.Done()
+		}(wg)
+
+		wg.Wait()
 	}
 
 	return http.HandlerFunc(fn)

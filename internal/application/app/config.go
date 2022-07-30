@@ -8,7 +8,7 @@ type Config struct {
 	Debug                 bool   `env-default:"false"`
 	RunAddress            string `env:"RUN_ADDRESS" env-default:"localhost:3000"`
 	DatabaseURI           string `env:"DATABASE_URI" env-default:"postgres://dev:dev@localhost:5432/dev?sslmode=disable"`
-	AccrualSystemAddress  string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:"localhost:8080"`
+	AccrualSystemAddress  string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:"http://localhost:8080"`
 	AccrualSystemMethod   string `env-default:"/api/orders/%s"`
 	CipherPass            string `env:"CIPHER_PASSWORD" env-default:"J53RPX6"`
 	SessionCookieDuration string `env:"COOKIE_DURATION" env-default:"24h"`
