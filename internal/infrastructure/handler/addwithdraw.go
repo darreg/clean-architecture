@@ -12,7 +12,7 @@ import (
 
 type WithdrawRequest struct {
 	Order string
-	Sum   int
+	Sum   float32
 }
 
 func AddWithdrawHandler(a *app.App) http.Handler {

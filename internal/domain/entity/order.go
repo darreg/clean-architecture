@@ -11,7 +11,7 @@ type Order struct {
 	Number      OrderNumber `json:"number"`
 	UserID      uuid.UUID   `json:"-"`
 	Status      OrderStatus `json:"status"`
-	Accrual     int         `json:"accrual,omitempty"`
+	Accrual     float32     `json:"accrual,omitempty"`
 	UploadedAt  *time.Time  `json:"uploaded_at"`
 	ProcessedAt *time.Time  `json:"processed_at,omitempty"`
 }

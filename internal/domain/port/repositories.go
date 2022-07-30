@@ -21,7 +21,7 @@ type UserRepository interface {
 	GetByLogin(ctx context.Context, login string) (*entity.User, error)
 	GetByCredential(ctx context.Context, login, passwordHash string) (*entity.User, error)
 	Add(ctx context.Context, user *entity.User) error
-	Withdraw(ctx context.Context, user *entity.User, sum int) error
+	Withdraw(ctx context.Context, user *entity.User, sum float32) error
 	Change(ctx context.Context, user *entity.User) error
 	ChangePassword(ctx context.Context, user *entity.User) error
 	Remove(ctx context.Context, userID uuid.UUID) error
@@ -39,7 +39,7 @@ type OrderRepository interface {
 type WithdrawRepository interface {
 	Transactor
 	Get(ctx context.Context, withdrawID uuid.UUID) (*entity.Withdraw, error)
-	GetWithdrawn(ctx context.Context, user *entity.User) (int, error)
+	GetWithdrawn(ctx context.Context, user *entity.User) (float32, error)
 	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error)
 	Add(ctx context.Context, order *entity.Withdraw) error
 	Change(ctx context.Context, order *entity.Withdraw) error

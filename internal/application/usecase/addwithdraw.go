@@ -12,7 +12,7 @@ import (
 func AddWithdraw(
 	ctx context.Context,
 	number string,
-	sum int,
+	sum float32,
 	userID string,
 	orderRepository port.OrderRepository,
 	userRepository port.UserRepository,

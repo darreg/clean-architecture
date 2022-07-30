@@ -72,7 +72,7 @@ func (u UserRepository) GetByCredential(ctx context.Context, login, passwordHash
 	return &user, nil
 }
 
-func (u UserRepository) Withdraw(ctx context.Context, user *entity.User, sum int) error {
+func (u UserRepository) Withdraw(ctx context.Context, user *entity.User, sum float32) error {
 	_, err := u.ExecContext(ctx, u.db,
 		"UPDATE users SET current=current-$2 WHERE id=$1", user.ID, sum,
 	)

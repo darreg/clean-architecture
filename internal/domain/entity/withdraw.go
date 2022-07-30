@@ -11,7 +11,7 @@ type Withdraw struct {
 	ID          uuid.UUID   `json:"-"`
 	UserID      uuid.UUID   `json:"-"`
 	OrderNumber OrderNumber `json:"order"`
-	Sum         int         `json:"sum"`
+	Sum         float32     `json:"sum"`
 	ProcessedAt *time.Time  `json:"processed_at"`
 }
 

@@ -26,7 +26,9 @@ func (t Transaction) InTransaction(ctx context.Context, db *sql.DB, tFunc func(c
 	return tx.Commit()
 }
 
-func (t Transaction) QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error) {
+func (t Transaction) QueryContext(
+	ctx context.Context, db *sql.DB, query string, args ...interface{},
+) (*sql.Rows, error) {
 	if tx := t.extractTx(ctx); tx != nil {
 		return tx.QueryContext(ctx, query, args...)
 	}
@@ -34,7 +36,9 @@ func (t Transaction) QueryContext(ctx context.Context, db *sql.DB, query string,
 	return db.QueryContext(ctx, query, args...)
 }
 
-func (t Transaction) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
+func (t Transaction) QueryRowContext(
+	ctx context.Context, db *sql.DB, query string, args ...interface{},
+) *sql.Row {
 	if tx := t.extractTx(ctx); tx != nil {
 		return tx.QueryRowContext(ctx, query, args...)
 	}
@@ -42,7 +46,9 @@ func (t Transaction) QueryRowContext(ctx context.Context, db *sql.DB, query stri
 	return db.QueryRowContext(ctx, query, args...)
 }
 
-func (t Transaction) ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+func (t Transaction) ExecContext(
+	ctx context.Context, db *sql.DB, query string, args ...interface{},
+) (sql.Result, error) {
 	if tx := t.extractTx(ctx); tx != nil {
 		return tx.ExecContext(ctx, query, args...)
 	}

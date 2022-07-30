@@ -44,8 +44,8 @@ func (w WithdrawRepository) Get(ctx context.Context, withdrawID uuid.UUID) (*ent
 	return &withdraw, nil
 }
 
-func (w WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User) (int, error) {
-	var withdrawn int
+func (w WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User) (float32, error) {
+	var withdrawn float32
 
 	err := w.QueryRowContext(ctx, w.db,
 		"SELECT SUM(sum) as withdrawn FROM withdraws WHERE user_id = $1", user.ID,
