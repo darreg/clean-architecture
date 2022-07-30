@@ -7,6 +7,7 @@ import (
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
+	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
 )
 
@@ -42,14 +43,13 @@ func AddWithdrawHandler(a *app.App) http.Handler {
 			withdrawRequest.Order,
 			withdrawRequest.Sum,
 			userID,
-			a.OrderRepository,
 			a.UserRepository,
 			a.WithdrawRepository,
 		)
 		if err != nil {
 			switch {
-			case errors.Is(err, usecase.ErrOrderNotFound):
-				a.Warn(w, r, http.StatusUnprocessableEntity, usecase.ErrInvalidOrderNumber)
+			case errors.Is(err, entity.ErrInvalidOrderFormat):
+				a.Warn(w, r, http.StatusUnprocessableEntity, entity.ErrInvalidOrderFormat)
 			case errors.Is(err, usecase.ErrNotEnoughFunds):
 				a.Warn(w, r, http.StatusPaymentRequired, usecase.ErrNotEnoughFunds)
 			default:

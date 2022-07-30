@@ -14,7 +14,6 @@ func AddWithdraw(
 	number string,
 	sum float32,
 	userID string,
-	orderRepository port.OrderRepository,
 	userRepository port.UserRepository,
 	withdrawRepository port.WithdrawRepository,
 ) error {
@@ -28,7 +27,7 @@ func AddWithdraw(
 		return err
 	}
 
-	order, err := orderRepository.Get(ctx, number)
+	orderNumber, err := entity.NewOrderNumber(number)
 	if err != nil {
 		return err
 	}
@@ -41,7 +40,7 @@ func AddWithdraw(
 	err = withdrawRepository.WithinTransaction(ctx, func(txCtx context.Context) error {
 		err := withdrawRepository.Add(txCtx, &entity.Withdraw{
 			ID:          uuid.New(),
-			OrderNumber: order.Number,
+			OrderNumber: *orderNumber,
 			UserID:      user.ID,
 			Sum:         sum,
 			ProcessedAt: &processedAt,
