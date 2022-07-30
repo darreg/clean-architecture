@@ -23,7 +23,7 @@ func NewStorage(dsn string) (*Storage, error) {
 		return nil, err
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
 	if err = db.PingContext(ctx); err != nil {

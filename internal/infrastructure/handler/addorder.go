@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"context"
 	"errors"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
@@ -33,9 +35,11 @@ func AddOrderHandler(a *app.App) http.Handler {
 			return
 		}
 
+		number := string(b)
+
 		err = usecase.AddOrder(
 			r.Context(),
-			string(b),
+			number,
 			userID,
 			a.OrderRepository,
 			a.UserRepository,
@@ -54,6 +58,17 @@ func AddOrderHandler(a *app.App) http.Handler {
 
 			return
 		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
+		defer cancel()
+
+		go usecase.Accrual(
+			ctx,
+			number, userID, a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod,
+			a.UserRepository,
+			a.OrderRepository,
+			a.Logger,
+		)
 
 		a.PlainRespond(w, r, http.StatusAccepted, []byte(http.StatusText(http.StatusAccepted)))
 	}

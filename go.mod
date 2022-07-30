@@ -3,10 +3,14 @@ module github.com/alrund/yp-1-project
 go 1.18
 
 require (
+	github.com/google/uuid v1.3.0
+	github.com/pkg/errors v0.9.1
+)
+
+require (
 	github.com/BurntSushi/toml v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang-migrate/migrate/v4 v4.15.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect

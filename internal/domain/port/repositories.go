@@ -21,10 +21,11 @@ type UserRepository interface {
 	GetByLogin(ctx context.Context, login string) (*entity.User, error)
 	GetByCredential(ctx context.Context, login, passwordHash string) (*entity.User, error)
 	Add(ctx context.Context, user *entity.User) error
-	Withdraw(ctx context.Context, user *entity.User, sum float32) error
 	Change(ctx context.Context, user *entity.User) error
 	ChangePassword(ctx context.Context, user *entity.User) error
 	Remove(ctx context.Context, userID uuid.UUID) error
+	Accrual(ctx context.Context, user *entity.User, accrual float32) error
+	Withdraw(ctx context.Context, user *entity.User, sum float32) error
 }
 
 type OrderRepository interface {

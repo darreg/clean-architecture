@@ -83,6 +83,17 @@ func (u UserRepository) Withdraw(ctx context.Context, user *entity.User, sum flo
 	return nil
 }
 
+func (u UserRepository) Accrual(ctx context.Context, user *entity.User, accrual float32) error {
+	_, err := u.ExecContext(ctx, u.db,
+		"UPDATE users SET current=current+$2 WHERE id=$1", user.ID, accrual,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (u UserRepository) Add(ctx context.Context, user *entity.User) error {
 	_, err := u.ExecContext(ctx, u.db,
 		"INSERT INTO users(ID, login, password) VALUES($1, $2, $3)",
