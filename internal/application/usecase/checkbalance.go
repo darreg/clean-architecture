@@ -15,8 +15,8 @@ type Balance struct {
 func CheckBalance(
 	ctx context.Context,
 	userID string,
-	userRepository port.UserRepository,
-	withdrawRepository port.WithdrawRepository,
+	userRepository port.UserGetter,
+	withdrawRepository port.Withdrawner,
 ) (*Balance, error) {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
