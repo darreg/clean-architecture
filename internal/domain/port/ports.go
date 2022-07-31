@@ -1,6 +1,8 @@
 package port
 
 import (
+	"context"
+	"database/sql"
 	"net/http"
 	"time"
 )
@@ -36,8 +38,43 @@ type Encryptor interface {
 	Decrypt(encrypted string) (string, error)
 }
 
-type Cooker interface {
-	ClearCookie(name string, w http.ResponseWriter)
-	AddCookie(name, value string, expireTime time.Time, w http.ResponseWriter)
+type CookieWithDurationAdder interface {
 	AddCookieWithDuration(name, value, duration string, w http.ResponseWriter) error
+}
+
+type CookieAdder interface {
+	AddCookie(name, value string, expireTime time.Time, w http.ResponseWriter)
+}
+
+type CookieCleaner interface {
+	ClearCookie(name string, w http.ResponseWriter)
+}
+
+type Cooker interface {
+	CookieCleaner
+	CookieAdder
+	CookieWithDurationAdder
+}
+
+type TransactSupporter interface {
+	WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error
+}
+
+type RowQuerier interface {
+	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row
+}
+
+type Querier interface {
+	QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error)
+}
+
+type Execer interface {
+	ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error)
+}
+
+type Transactor interface {
+	TransactSupporter
+	Querier
+	RowQuerier
+	Execer
 }
