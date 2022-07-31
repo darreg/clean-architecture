@@ -5,15 +5,16 @@ import (
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/mocks"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCheckBalance(t *testing.T) {
+func TestWithdrawList(t *testing.T) {
 	type mock struct {
-		userGetter  *mocks.UserGetter
-		withdrawner *mocks.Withdrawner
+		userGetter     *mocks.UserGetter
+		withdrawGetter *mocks.WithdrawAllByUserGetter
 	}
 
 	type args struct {
@@ -29,6 +30,23 @@ func TestCheckBalance(t *testing.T) {
 		PasswordHash: "Password hash",
 		Current:      555.55,
 	}
+	processedAt := time.Now()
+	withdrawsMock := []*entity.Withdraw{
+		{
+			ID:          uuid.New(),
+			UserID:      userUUID,
+			OrderNumber: entity.OrderNumber("xxx"),
+			Sum:         100.1,
+			ProcessedAt: &processedAt,
+		},
+		{
+			ID:          uuid.New(),
+			UserID:      userUUID,
+			OrderNumber: entity.OrderNumber("yyy"),
+			Sum:         200.2,
+			ProcessedAt: &processedAt,
+		},
+	}
 	mockPrepare := func(m *mock, ctx context.Context, userID uuid.UUID, user *entity.User) {
 		userGetterMock := m.userGetter.On("Get", ctx, userID)
 		if userID == userMock.ID {
@@ -37,18 +55,18 @@ func TestCheckBalance(t *testing.T) {
 			userGetterMock.Return(nil, ErrUserNotFound)
 		}
 
-		withdrawnerMock := m.withdrawner.On("GetWithdrawn", ctx, user)
+		withdrawGetter := m.withdrawGetter.On("GetAllByUser", ctx, user)
 		if user.ID == userMock.ID {
-			withdrawnerMock.Return(float32(666.66), nil)
+			withdrawGetter.Return(withdrawsMock, nil)
 		} else {
-			withdrawnerMock.Return(float32(0), nil)
+			withdrawGetter.Return(nil, ErrWithdrawNotFound)
 		}
 	}
 
 	tests := []struct {
 		name        string
 		args        *args
-		want        *Balance
+		want        []*entity.Withdraw
 		wantErr     error
 		mockPrepare func(m *mock, ctx context.Context, userID uuid.UUID, user *entity.User)
 	}{
@@ -59,7 +77,7 @@ func TestCheckBalance(t *testing.T) {
 				userUUID,
 				userMock,
 			},
-			&Balance{Current: 555.55, Withdrawn: 666.66},
+			withdrawsMock,
 			nil,
 			mockPrepare,
 		},
@@ -78,28 +96,27 @@ func TestCheckBalance(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			m := &mock{
-				userGetter:  new(mocks.UserGetter),
-				withdrawner: new(mocks.Withdrawner),
+				userGetter:     new(mocks.UserGetter),
+				withdrawGetter: new(mocks.WithdrawAllByUserGetter),
 			}
 
 			if tt.mockPrepare != nil {
 				tt.mockPrepare(m, tt.args.ctx, tt.args.userID, tt.args.user)
 			}
 
-			balance, err := CheckBalance(
+			withdraws, err := WithdrawList(
 				tt.args.ctx,
 				tt.args.userID.String(),
+				m.withdrawGetter,
 				m.userGetter,
-				m.withdrawner,
 			)
-
+			
 			if tt.wantErr != nil {
 				assert.Error(t, tt.wantErr, err)
 				return
 			}
 			assert.NoError(t, err)
-			assert.Equal(t, tt.want.Current, balance.Current)
-			assert.Equal(t, tt.want.Withdrawn, balance.Withdrawn)
+			assert.Equal(t, tt.want, withdraws)
 		})
 	}
 }

@@ -11,8 +11,8 @@ import (
 func WithdrawList(
 	ctx context.Context,
 	userID string,
-	withdrawRepository port.WithdrawRepository,
-	userRepository port.UserRepository,
+	withdrawRepository port.WithdrawAllByUserGetter,
+	userRepository port.UserGetter,
 ) ([]*entity.Withdraw, error) {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {

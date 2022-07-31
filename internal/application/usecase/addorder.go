@@ -14,8 +14,8 @@ func AddOrder(
 	ctx context.Context,
 	number string,
 	userID string,
-	orderRepository port.OrderRepository,
-	userRepository port.UserRepository,
+	orderRepository port.OrderWithCheckAdder,
+	userRepository port.UserGetter,
 ) error {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {

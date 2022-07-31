@@ -43,6 +43,21 @@ type UserWithdrawer interface {
 	Withdraw(ctx context.Context, user *entity.User, sum float32) error
 }
 
+type UserAddWithdrawer interface {
+	UserGetter
+	UserWithdrawer
+}
+
+type UserTransactionalAccrualer interface {
+	TransactSupporter
+	UserAccrualer
+}
+
+type UserRegistrator interface {
+	UserByLoginGetter
+	UserAdder
+}
+
 type UserRepository interface {
 	Transactor
 	UserGetter

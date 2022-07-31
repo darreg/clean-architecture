@@ -26,6 +26,16 @@ type OrderRemover interface {
 	Remove(ctx context.Context, number string) error
 }
 
+type OrderWithCheckAdder interface {
+	OrderGetter
+	OrderAdder
+}
+
+type OrderWithCheckChanger interface {
+	OrderGetter
+	OrderChanger
+}
+
 type OrderRepository interface {
 	Transactor
 	OrderGetter

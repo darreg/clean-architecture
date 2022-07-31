@@ -11,8 +11,8 @@ import (
 func OrderList(
 	ctx context.Context,
 	userID string,
-	orderRepository port.OrderRepository,
-	userRepository port.UserRepository,
+	orderRepository port.OrderAllByUserGetter,
+	userRepository port.UserGetter,
 ) ([]*entity.Order, error) {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {

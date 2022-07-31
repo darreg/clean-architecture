@@ -19,13 +19,13 @@ func Registration(
 	ctx context.Context,
 	regData RegistrationData,
 	sessionCookieName, sessionCookieDuration string,
-	repository port.UserRepository,
+	userRepository port.UserRegistrator,
 	encryptor port.Encryptor,
-	cooker port.Cooker,
+	cooker port.CookieWithDurationAdder,
 	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.GetByLogin(ctx, regData.Login)
+	user, err := userRepository.GetByLogin(ctx, regData.Login)
 	if err != nil && !errors.Is(err, ErrUserNotFound) {
 		return err
 	}
@@ -39,7 +39,7 @@ func Registration(
 		Login:        regData.Login,
 		PasswordHash: hasher.Hash(regData.Password),
 	}
-	err = repository.Add(ctx, user)
+	err = userRepository.Add(ctx, user)
 	if err != nil {
 		return err
 	}

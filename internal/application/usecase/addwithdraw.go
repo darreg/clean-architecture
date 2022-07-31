@@ -14,8 +14,8 @@ func AddWithdraw(
 	number string,
 	sum float32,
 	userID string,
-	userRepository port.UserRepository,
-	withdrawRepository port.WithdrawRepository,
+	userRepository port.UserAddWithdrawer,
+	withdrawRepository port.WithdrawTransactionalAdder,
 ) error {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {

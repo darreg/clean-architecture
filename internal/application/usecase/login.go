@@ -16,9 +16,9 @@ func Login(
 	ctx context.Context,
 	cred Credential,
 	sessionCookieName, sessionCookieDuration string,
-	userRepository port.UserRepository,
+	userRepository port.UserByCredentialGetter,
 	encryptor port.Encryptor,
-	cooker port.Cooker,
+	cooker port.CookieWithDurationAdder,
 	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
