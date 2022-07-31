@@ -16,13 +16,13 @@ func Login(
 	ctx context.Context,
 	cred Credential,
 	sessionCookieName, sessionCookieDuration string,
-	repository port.UserRepository,
+	userRepository port.UserRepository,
 	encryptor port.Encryptor,
 	cooker port.Cooker,
 	hasher port.PasswordHasher,
 	w http.ResponseWriter,
 ) error {
-	user, err := repository.GetByCredential(ctx, cred.Login, hasher.Hash(cred.Password))
+	user, err := userRepository.GetByCredential(ctx, cred.Login, hasher.Hash(cred.Password))
 	if err != nil {
 		return err
 	}
