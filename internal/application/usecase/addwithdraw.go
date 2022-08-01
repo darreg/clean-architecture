@@ -15,7 +15,8 @@ func AddWithdraw(
 	sum float32,
 	userID string,
 	userRepository port.UserAddWithdrawer,
-	withdrawRepository port.WithdrawTransactionalAdder,
+	withdrawRepository port.WithdrawAdder,
+	transactor port.Transactor,
 ) error {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
@@ -37,7 +38,7 @@ func AddWithdraw(
 	}
 
 	processedAt := time.Now()
-	err = withdrawRepository.WithinTransaction(ctx, func(txCtx context.Context) error {
+	err = transactor.WithinTransaction(ctx, func(txCtx context.Context) error {
 		err := withdrawRepository.Add(txCtx, &entity.Withdraw{
 			ID:          uuid.New(),
 			OrderNumber: *orderNumber,

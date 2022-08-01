@@ -45,6 +45,7 @@ func AddWithdrawHandler(a *app.App) http.Handler {
 			userID,
 			a.UserRepository,
 			a.WithdrawRepository,
+			a.Transactor,
 		)
 		if err != nil {
 			switch {

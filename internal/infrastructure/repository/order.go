@@ -8,20 +8,16 @@ import (
 
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/domain/entity"
-	"github.com/alrund/yp-1-project/internal/infrastructure/helper"
+	"github.com/alrund/yp-1-project/internal/infrastructure/adapter"
 )
 
 type OrderRepository struct {
-	helper.Transaction
+	tx *adapter.Transactor
 	db *sql.DB
 }
 
-func NewOrderRepository(db *sql.DB) *OrderRepository {
-	return &OrderRepository{db: db}
-}
-
-func (o OrderRepository) WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error {
-	return o.InTransaction(ctx, o.db, tFunc)
+func NewOrderRepository(tx *adapter.Transactor, db *sql.DB) *OrderRepository {
+	return &OrderRepository{tx: tx, db: db}
 }
 
 func (o OrderRepository) Get(ctx context.Context, number string) (*entity.Order, error) {
@@ -29,7 +25,7 @@ func (o OrderRepository) Get(ctx context.Context, number string) (*entity.Order,
 	var uploadedAt time.Time
 	var processedAt sql.NullTime
 
-	err := o.QueryRowContext(ctx, o.db,
+	err := o.tx.QueryRowContext(ctx,
 		"SELECT number, user_id, status, accrual, uploaded_at, processed_at FROM orders WHERE number = $1", number,
 	).Scan(&order.Number, &order.UserID, &order.Status, &order.Accrual, &uploadedAt, &processedAt)
 	if err != nil {
@@ -49,7 +45,7 @@ func (o OrderRepository) Get(ctx context.Context, number string) (*entity.Order,
 }
 
 func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error) {
-	rows, err := o.QueryContext(ctx, o.db,
+	rows, err := o.tx.QueryContext(ctx,
 		"SELECT number, user_id, status, accrual, uploaded_at, processed_at FROM orders WHERE user_id = $1", user.ID,
 	)
 	if err != nil {
@@ -89,7 +85,7 @@ func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([
 }
 
 func (o OrderRepository) Add(ctx context.Context, order *entity.Order) error {
-	_, err := o.ExecContext(ctx, o.db,
+	_, err := o.tx.ExecContext(ctx,
 		"INSERT INTO orders(number, user_id, status, accrual, uploaded_at, processed_at) VALUES($1, $2, $3, $4, $5, $6)",
 		order.Number, order.UserID, order.Status, order.Accrual, order.UploadedAt, order.ProcessedAt)
 	if err != nil {
@@ -100,7 +96,7 @@ func (o OrderRepository) Add(ctx context.Context, order *entity.Order) error {
 }
 
 func (o OrderRepository) Change(ctx context.Context, order *entity.Order) error {
-	_, err := o.ExecContext(ctx, o.db,
+	_, err := o.tx.ExecContext(ctx,
 		"UPDATE orders SET user_id=$2, status=$3, accrual=$4, processed_at=$5 WHERE number=$1",
 		order.Number, order.UserID, order.Status, order.Accrual, order.ProcessedAt)
 	if err != nil {
@@ -111,6 +107,6 @@ func (o OrderRepository) Change(ctx context.Context, order *entity.Order) error 
 }
 
 func (o OrderRepository) Remove(ctx context.Context, number string) error {
-	_, err := o.ExecContext(ctx, o.db, "DELETE FROM orders WHERE number=$1", number)
+	_, err := o.tx.ExecContext(ctx, "DELETE FROM orders WHERE number=$1", number)
 	return err
 }

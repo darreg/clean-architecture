@@ -68,6 +68,7 @@ func AddOrderHandler(a *app.App) http.Handler {
 				number, userID, a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod,
 				a.UserRepository,
 				a.OrderRepository,
+				a.Transactor,
 				a.Logger,
 			)
 			wg.Done()

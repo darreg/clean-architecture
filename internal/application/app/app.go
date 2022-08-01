@@ -9,6 +9,7 @@ type App struct {
 	Encryptor          port.Encryptor
 	Hasher             port.PasswordHasher
 	Cooker             port.Cooker
+	Transactor         port.Transactor
 	UserRepository     port.UserRepository
 	OrderRepository    port.OrderRepository
 	WithdrawRepository port.WithdrawRepository
@@ -21,6 +22,7 @@ func NewApp(
 	encryptor port.Encryptor,
 	hasher port.PasswordHasher,
 	cooker port.Cooker,
+	transactor port.Transactor,
 	userRepository port.UserRepository,
 	orderRepository port.OrderRepository,
 	withRepository port.WithdrawRepository,
@@ -32,6 +34,7 @@ func NewApp(
 		Encryptor:          encryptor,
 		Hasher:             hasher,
 		Cooker:             cooker,
+		Transactor:         transactor,
 		UserRepository:     userRepository,
 		OrderRepository:    orderRepository,
 		WithdrawRepository: withRepository,

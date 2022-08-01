@@ -48,18 +48,12 @@ type UserAddWithdrawer interface {
 	UserWithdrawer
 }
 
-type UserTransactionalAccrualer interface {
-	TransactSupporter
-	UserAccrualer
-}
-
 type UserRegistrator interface {
 	UserByLoginGetter
 	UserAdder
 }
 
 type UserRepository interface {
-	Transactor
 	UserGetter
 	UserByLoginGetter
 	UserByCredentialGetter

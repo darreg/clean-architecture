@@ -61,15 +61,15 @@ type TransactSupporter interface {
 }
 
 type RowQuerier interface {
-	QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row
+	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
 }
 
 type Querier interface {
-	QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error)
+	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
 }
 
 type Execer interface {
-	ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error)
+	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
 }
 
 type Transactor interface {

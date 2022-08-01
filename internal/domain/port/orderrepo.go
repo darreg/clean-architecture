@@ -37,7 +37,6 @@ type OrderWithCheckChanger interface {
 }
 
 type OrderRepository interface {
-	Transactor
 	OrderGetter
 	OrderAllByUserGetter
 	OrderAdder

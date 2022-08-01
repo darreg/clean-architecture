@@ -31,13 +31,7 @@ type WithdrawRemover interface {
 	Remove(ctx context.Context, withdrawID uuid.UUID) error
 }
 
-type WithdrawTransactionalAdder interface {
-	TransactSupporter
-	WithdrawAdder
-}
-
 type WithdrawRepository interface {
-	Transactor
 	WithdrawGetter
 	WithdrawAllByUserGetter
 	Withdrawner

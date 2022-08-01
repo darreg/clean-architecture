@@ -11,10 +11,11 @@ func AccrualProcess(
 	ctx context.Context,
 	accrualResult *AccrualResult,
 	user *entity.User,
-	userRepository port.UserTransactionalAccrualer,
+	userRepository port.UserAccrualer,
 	orderRepository port.OrderWithCheckChanger,
+	transactor port.Transactor,
 ) error {
-	err := userRepository.WithinTransaction(ctx, func(txCtx context.Context) error {
+	err := transactor.WithinTransaction(ctx, func(txCtx context.Context) error {
 		order, err := orderRepository.Get(ctx, accrualResult.OrderNumber)
 		if err != nil {
 			return err

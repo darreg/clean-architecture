@@ -65,9 +65,10 @@ func builder(logger port.Logger) (*app.App, error) {
 		cooker             = adapter.NewCooker()
 		hasher             = adapter.NewHasher()
 		encryptor          = adapter.NewEncryptor(config.CipherPass)
-		userRepository     = repository.NewUserRepository(storage.Connect)
-		orderRepository    = repository.NewOrderRepository(storage.Connect)
-		withdrawRepository = repository.NewWithdrawRepository(storage.Connect)
+		transactor         = adapter.NewTransactor(storage.Connect)
+		userRepository     = repository.NewUserRepository(transactor, storage.Connect)
+		orderRepository    = repository.NewOrderRepository(transactor, storage.Connect)
+		withdrawRepository = repository.NewWithdrawRepository(transactor, storage.Connect)
 	)
 
 	return app.NewApp(
@@ -77,6 +78,7 @@ func builder(logger port.Logger) (*app.App, error) {
 		encryptor,
 		hasher,
 		cooker,
+		transactor,
 		userRepository,
 		orderRepository,
 		withdrawRepository,

@@ -15,6 +15,7 @@ func Accrual(
 	number, userID, accrualSystemAddress, accrualSystemMethod string,
 	userRepository port.UserRepository,
 	orderRepository port.OrderRepository,
+	transactor port.Transactor,
 	logger port.Logger,
 ) {
 	userUUID, err := uuid.Parse(userID)
@@ -45,7 +46,7 @@ func Accrual(
 
 			logger.Info("Accrual response", "number", accrualResult.OrderNumber, "status", accrualResult.Status.String())
 
-			err = AccrualProcess(ctx, accrualResult, user, userRepository, orderRepository)
+			err = AccrualProcess(ctx, accrualResult, user, userRepository, orderRepository, transactor)
 			if err != nil {
 				logger.Error(err)
 				return
