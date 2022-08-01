@@ -14,5 +14,6 @@ func NewUser(login, passwordHash string) *User {
 		ID:           uuid.New(),
 		Login:        login,
 		PasswordHash: passwordHash,
+		Current:      0,
 	}
 }
