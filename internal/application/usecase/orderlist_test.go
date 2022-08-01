@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestWithdrawList(t *testing.T) {
+func TestOrderList(t *testing.T) {
 	type m struct {
-		userGetter     *mocks.UserGetter
-		withdrawGetter *mocks.WithdrawAllByUserGetter
+		userGetter  *mocks.UserGetter
+		orderGetter *mocks.OrderAllByUserGetter
 	}
 
 	type args struct {
@@ -24,20 +24,23 @@ func TestWithdrawList(t *testing.T) {
 	}
 
 	userUUID := uuid.New()
+	uploadedAt := time.Now()
 	processedAt := time.Now()
-	withdrawsMock := []*entity.Withdraw{
+	ordersMock := []*entity.Order{
 		{
-			ID:          uuid.New(),
+			Number:      entity.OrderNumber("12345678903"),
 			UserID:      userUUID,
-			OrderNumber: entity.OrderNumber("xxx"),
-			Sum:         100.1,
+			Status:      entity.New,
+			Accrual:     111.1,
+			UploadedAt:  &uploadedAt,
 			ProcessedAt: &processedAt,
 		},
 		{
-			ID:          uuid.New(),
+			Number:      entity.OrderNumber("3272700463"),
 			UserID:      userUUID,
-			OrderNumber: entity.OrderNumber("yyy"),
-			Sum:         200.2,
+			Status:      entity.New,
+			Accrual:     222.2,
+			UploadedAt:  &uploadedAt,
 			ProcessedAt: &processedAt,
 		},
 	}
@@ -45,7 +48,7 @@ func TestWithdrawList(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        *args
-		want        []*entity.Withdraw
+		want        []*entity.Order
 		wantErr     error
 		mockPrepare func(a *args) *m
 	}{
@@ -55,7 +58,7 @@ func TestWithdrawList(t *testing.T) {
 				context.Background(),
 				userUUID,
 			},
-			withdrawsMock,
+			ordersMock,
 			nil,
 			func(a *args) *m {
 				userGetter := mocks.NewUserGetter(t)
@@ -68,12 +71,12 @@ func TestWithdrawList(t *testing.T) {
 						Current:      0,
 					}, nil)
 
-				withdrawGetter := mocks.NewWithdrawAllByUserGetter(t)
-				withdrawGetter.EXPECT().
+				orderGetter := mocks.NewOrderAllByUserGetter(t)
+				orderGetter.EXPECT().
 					GetAllByUser(a.ctx, mock.AnythingOfType("*entity.User")).
-					Return(withdrawsMock, nil)
+					Return(ordersMock, nil)
 
-				return &m{userGetter, withdrawGetter}
+				return &m{userGetter, orderGetter}
 			},
 		},
 		{
@@ -90,19 +93,19 @@ func TestWithdrawList(t *testing.T) {
 					Get(a.ctx, a.userID).
 					Return(nil, ErrUserNotFound)
 
-				withdrawGetter := mocks.NewWithdrawAllByUserGetter(t)
+				orderGetter := mocks.NewOrderAllByUserGetter(t)
 
-				return &m{userGetter, withdrawGetter}
+				return &m{userGetter, orderGetter}
 			},
 		},
 		{
-			"fail with withdraw not found error",
+			"fail with order not found error",
 			&args{
 				context.Background(),
 				uuid.New(),
 			},
 			nil,
-			ErrWithdrawNotFound,
+			ErrOrderNotFound,
 			func(a *args) *m {
 				userGetter := mocks.NewUserGetter(t)
 				userGetter.EXPECT().
@@ -114,12 +117,12 @@ func TestWithdrawList(t *testing.T) {
 						Current:      0,
 					}, nil)
 
-				withdrawGetter := mocks.NewWithdrawAllByUserGetter(t)
-				withdrawGetter.EXPECT().
+				orderGetter := mocks.NewOrderAllByUserGetter(t)
+				orderGetter.EXPECT().
 					GetAllByUser(a.ctx, mock.AnythingOfType("*entity.User")).
-					Return(nil, ErrWithdrawNotFound)
+					Return(nil, ErrOrderNotFound)
 
-				return &m{userGetter, withdrawGetter}
+				return &m{userGetter, orderGetter}
 			},
 		},
 	}
@@ -127,10 +130,10 @@ func TestWithdrawList(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			m := tt.mockPrepare(tt.args)
 
-			withdraws, err := WithdrawList(
+			withdraws, err := OrderList(
 				tt.args.ctx,
 				tt.args.userID.String(),
-				m.withdrawGetter,
+				m.orderGetter,
 				m.userGetter,
 			)
 

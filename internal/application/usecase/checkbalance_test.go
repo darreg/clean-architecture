@@ -2,16 +2,17 @@ package usecase
 
 import (
 	"context"
-	"github.com/alrund/yp-1-project/internal/domain/entity"
-	"github.com/alrund/yp-1-project/mocks"
 	"testing"
 
+	"github.com/alrund/yp-1-project/internal/domain/entity"
+	"github.com/alrund/yp-1-project/mocks"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestCheckBalance(t *testing.T) {
-	type mock struct {
+	type m struct {
 		userGetter  *mocks.UserGetter
 		withdrawner *mocks.Withdrawner
 	}
@@ -19,72 +20,70 @@ func TestCheckBalance(t *testing.T) {
 	type args struct {
 		ctx    context.Context
 		userID uuid.UUID
-		user   *entity.User
 	}
+
+	const Current float32 = 555.55
+	const Withdrawn float32 = 555.55
 
 	userUUID := uuid.New()
-	userMock := &entity.User{
-		ID:           userUUID,
-		Login:        "User login",
-		PasswordHash: "Password hash",
-		Current:      555.55,
-	}
-	mockPrepare := func(m *mock, ctx context.Context, userID uuid.UUID, user *entity.User) {
-		userGetterMock := m.userGetter.On("Get", ctx, userID)
-		if userID == userMock.ID {
-			userGetterMock.Return(userMock, nil)
-		} else {
-			userGetterMock.Return(nil, ErrUserNotFound)
-		}
-
-		withdrawnerMock := m.withdrawner.On("GetWithdrawn", ctx, user)
-		if user.ID == userMock.ID {
-			withdrawnerMock.Return(float32(666.66), nil)
-		} else {
-			withdrawnerMock.Return(float32(0), nil)
-		}
-	}
 
 	tests := []struct {
 		name        string
 		args        *args
 		want        *Balance
 		wantErr     error
-		mockPrepare func(m *mock, ctx context.Context, userID uuid.UUID, user *entity.User)
+		mockPrepare func(a *args) *m
 	}{
 		{
 			"success",
 			&args{
 				context.Background(),
 				userUUID,
-				userMock,
 			},
-			&Balance{Current: 555.55, Withdrawn: 666.66},
+			&Balance{Current: Current, Withdrawn: Withdrawn},
 			nil,
-			mockPrepare,
+			func(a *args) *m {
+				userGetter := mocks.NewUserGetter(t)
+				userGetter.EXPECT().
+					Get(a.ctx, a.userID).
+					Return(&entity.User{
+						ID:           a.userID,
+						Login:        "User login",
+						PasswordHash: "Password hash",
+						Current:      Current,
+					}, nil)
+
+				withdrawner := mocks.NewWithdrawner(t)
+				withdrawner.EXPECT().
+					GetWithdrawn(a.ctx, mock.AnythingOfType("*entity.User")).
+					Return(Withdrawn, nil)
+
+				return &m{userGetter, withdrawner}
+			},
 		},
 		{
 			"fail",
 			&args{
 				context.Background(),
-				uuid.New(),
-				userMock,
+				userUUID,
 			},
 			nil,
 			ErrUserNotFound,
-			mockPrepare,
+			func(a *args) *m {
+				userGetter := mocks.NewUserGetter(t)
+				userGetter.EXPECT().
+					Get(a.ctx, a.userID).
+					Return(nil, ErrUserNotFound)
+
+				withdrawner := mocks.NewWithdrawner(t)
+
+				return &m{userGetter, withdrawner}
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			m := &mock{
-				userGetter:  new(mocks.UserGetter),
-				withdrawner: new(mocks.Withdrawner),
-			}
-
-			if tt.mockPrepare != nil {
-				tt.mockPrepare(m, tt.args.ctx, tt.args.userID, tt.args.user)
-			}
+			m := tt.mockPrepare(tt.args)
 
 			balance, err := CheckBalance(
 				tt.args.ctx,
