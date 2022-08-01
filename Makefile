@@ -29,4 +29,4 @@ migration-down:
 	migrate -database ${DATABASE_URI} -path migrations down
 
 mock-generate:
-	mockery --dir=internal/domain/port --all
+	mockery --dir=internal/domain/port --all --with-expecter
