@@ -23,16 +23,16 @@ func (_m *Execer) EXPECT() *Execer_Expecter {
 	return &Execer_Expecter{mock: &_m.Mock}
 }
 
-// ExecContext provides a mock function with given fields: ctx, db, query, args
-func (_m *Execer) ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+// ExecContext provides a mock function with given fields: ctx, query, args
+func (_m *Execer) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
 	var _ca []interface{}
-	_ca = append(_ca, ctx, db, query)
+	_ca = append(_ca, ctx, query)
 	_ca = append(_ca, args...)
 	ret := _m.Called(_ca...)
 
 	var r0 sql.Result
-	if rf, ok := ret.Get(0).(func(context.Context, *sql.DB, string, ...interface{}) sql.Result); ok {
-		r0 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) sql.Result); ok {
+		r0 = rf(ctx, query, args...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(sql.Result)
@@ -40,8 +40,8 @@ func (_m *Execer) ExecContext(ctx context.Context, db *sql.DB, query string, arg
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *sql.DB, string, ...interface{}) error); ok {
-		r1 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
+		r1 = rf(ctx, query, args...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -56,23 +56,22 @@ type Execer_ExecContext_Call struct {
 
 // ExecContext is a helper method to define mock.On call
 //  - ctx context.Context
-//  - db *sql.DB
 //  - query string
 //  - args ...interface{}
-func (_e *Execer_Expecter) ExecContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Execer_ExecContext_Call {
+func (_e *Execer_Expecter) ExecContext(ctx interface{}, query interface{}, args ...interface{}) *Execer_ExecContext_Call {
 	return &Execer_ExecContext_Call{Call: _e.mock.On("ExecContext",
-		append([]interface{}{ctx, db, query}, args...)...)}
+		append([]interface{}{ctx, query}, args...)...)}
 }
 
-func (_c *Execer_ExecContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Execer_ExecContext_Call {
+func (_c *Execer_ExecContext_Call) Run(run func(ctx context.Context, query string, args ...interface{})) *Execer_ExecContext_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]interface{}, len(args)-3)
-		for i, a := range args[3:] {
+		variadicArgs := make([]interface{}, len(args)-2)
+		for i, a := range args[2:] {
 			if a != nil {
 				variadicArgs[i] = a.(interface{})
 			}
 		}
-		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+		run(args[0].(context.Context), args[1].(string), variadicArgs...)
 	})
 	return _c
 }

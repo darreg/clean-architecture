@@ -23,16 +23,16 @@ func (_m *RowQuerier) EXPECT() *RowQuerier_Expecter {
 	return &RowQuerier_Expecter{mock: &_m.Mock}
 }
 
-// QueryRowContext provides a mock function with given fields: ctx, db, query, args
-func (_m *RowQuerier) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
+// QueryRowContext provides a mock function with given fields: ctx, query, args
+func (_m *RowQuerier) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
 	var _ca []interface{}
-	_ca = append(_ca, ctx, db, query)
+	_ca = append(_ca, ctx, query)
 	_ca = append(_ca, args...)
 	ret := _m.Called(_ca...)
 
 	var r0 *sql.Row
-	if rf, ok := ret.Get(0).(func(context.Context, *sql.DB, string, ...interface{}) *sql.Row); ok {
-		r0 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) *sql.Row); ok {
+		r0 = rf(ctx, query, args...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*sql.Row)
@@ -49,23 +49,22 @@ type RowQuerier_QueryRowContext_Call struct {
 
 // QueryRowContext is a helper method to define mock.On call
 //  - ctx context.Context
-//  - db *sql.DB
 //  - query string
 //  - args ...interface{}
-func (_e *RowQuerier_Expecter) QueryRowContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *RowQuerier_QueryRowContext_Call {
+func (_e *RowQuerier_Expecter) QueryRowContext(ctx interface{}, query interface{}, args ...interface{}) *RowQuerier_QueryRowContext_Call {
 	return &RowQuerier_QueryRowContext_Call{Call: _e.mock.On("QueryRowContext",
-		append([]interface{}{ctx, db, query}, args...)...)}
+		append([]interface{}{ctx, query}, args...)...)}
 }
 
-func (_c *RowQuerier_QueryRowContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *RowQuerier_QueryRowContext_Call {
+func (_c *RowQuerier_QueryRowContext_Call) Run(run func(ctx context.Context, query string, args ...interface{})) *RowQuerier_QueryRowContext_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]interface{}, len(args)-3)
-		for i, a := range args[3:] {
+		variadicArgs := make([]interface{}, len(args)-2)
+		for i, a := range args[2:] {
 			if a != nil {
 				variadicArgs[i] = a.(interface{})
 			}
 		}
-		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+		run(args[0].(context.Context), args[1].(string), variadicArgs...)
 	})
 	return _c
 }

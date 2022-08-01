@@ -23,16 +23,16 @@ func (_m *Transactor) EXPECT() *Transactor_Expecter {
 	return &Transactor_Expecter{mock: &_m.Mock}
 }
 
-// ExecContext provides a mock function with given fields: ctx, db, query, args
-func (_m *Transactor) ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
+// ExecContext provides a mock function with given fields: ctx, query, args
+func (_m *Transactor) ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error) {
 	var _ca []interface{}
-	_ca = append(_ca, ctx, db, query)
+	_ca = append(_ca, ctx, query)
 	_ca = append(_ca, args...)
 	ret := _m.Called(_ca...)
 
 	var r0 sql.Result
-	if rf, ok := ret.Get(0).(func(context.Context, *sql.DB, string, ...interface{}) sql.Result); ok {
-		r0 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) sql.Result); ok {
+		r0 = rf(ctx, query, args...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(sql.Result)
@@ -40,8 +40,8 @@ func (_m *Transactor) ExecContext(ctx context.Context, db *sql.DB, query string,
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *sql.DB, string, ...interface{}) error); ok {
-		r1 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
+		r1 = rf(ctx, query, args...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -56,23 +56,22 @@ type Transactor_ExecContext_Call struct {
 
 // ExecContext is a helper method to define mock.On call
 //  - ctx context.Context
-//  - db *sql.DB
 //  - query string
 //  - args ...interface{}
-func (_e *Transactor_Expecter) ExecContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_ExecContext_Call {
+func (_e *Transactor_Expecter) ExecContext(ctx interface{}, query interface{}, args ...interface{}) *Transactor_ExecContext_Call {
 	return &Transactor_ExecContext_Call{Call: _e.mock.On("ExecContext",
-		append([]interface{}{ctx, db, query}, args...)...)}
+		append([]interface{}{ctx, query}, args...)...)}
 }
 
-func (_c *Transactor_ExecContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_ExecContext_Call {
+func (_c *Transactor_ExecContext_Call) Run(run func(ctx context.Context, query string, args ...interface{})) *Transactor_ExecContext_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]interface{}, len(args)-3)
-		for i, a := range args[3:] {
+		variadicArgs := make([]interface{}, len(args)-2)
+		for i, a := range args[2:] {
 			if a != nil {
 				variadicArgs[i] = a.(interface{})
 			}
 		}
-		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+		run(args[0].(context.Context), args[1].(string), variadicArgs...)
 	})
 	return _c
 }
@@ -82,16 +81,16 @@ func (_c *Transactor_ExecContext_Call) Return(_a0 sql.Result, _a1 error) *Transa
 	return _c
 }
 
-// QueryContext provides a mock function with given fields: ctx, db, query, args
-func (_m *Transactor) QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error) {
+// QueryContext provides a mock function with given fields: ctx, query, args
+func (_m *Transactor) QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error) {
 	var _ca []interface{}
-	_ca = append(_ca, ctx, db, query)
+	_ca = append(_ca, ctx, query)
 	_ca = append(_ca, args...)
 	ret := _m.Called(_ca...)
 
 	var r0 *sql.Rows
-	if rf, ok := ret.Get(0).(func(context.Context, *sql.DB, string, ...interface{}) *sql.Rows); ok {
-		r0 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) *sql.Rows); ok {
+		r0 = rf(ctx, query, args...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*sql.Rows)
@@ -99,8 +98,8 @@ func (_m *Transactor) QueryContext(ctx context.Context, db *sql.DB, query string
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, *sql.DB, string, ...interface{}) error); ok {
-		r1 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(1).(func(context.Context, string, ...interface{}) error); ok {
+		r1 = rf(ctx, query, args...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -115,23 +114,22 @@ type Transactor_QueryContext_Call struct {
 
 // QueryContext is a helper method to define mock.On call
 //  - ctx context.Context
-//  - db *sql.DB
 //  - query string
 //  - args ...interface{}
-func (_e *Transactor_Expecter) QueryContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_QueryContext_Call {
+func (_e *Transactor_Expecter) QueryContext(ctx interface{}, query interface{}, args ...interface{}) *Transactor_QueryContext_Call {
 	return &Transactor_QueryContext_Call{Call: _e.mock.On("QueryContext",
-		append([]interface{}{ctx, db, query}, args...)...)}
+		append([]interface{}{ctx, query}, args...)...)}
 }
 
-func (_c *Transactor_QueryContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_QueryContext_Call {
+func (_c *Transactor_QueryContext_Call) Run(run func(ctx context.Context, query string, args ...interface{})) *Transactor_QueryContext_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]interface{}, len(args)-3)
-		for i, a := range args[3:] {
+		variadicArgs := make([]interface{}, len(args)-2)
+		for i, a := range args[2:] {
 			if a != nil {
 				variadicArgs[i] = a.(interface{})
 			}
 		}
-		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+		run(args[0].(context.Context), args[1].(string), variadicArgs...)
 	})
 	return _c
 }
@@ -141,16 +139,16 @@ func (_c *Transactor_QueryContext_Call) Return(_a0 *sql.Rows, _a1 error) *Transa
 	return _c
 }
 
-// QueryRowContext provides a mock function with given fields: ctx, db, query, args
-func (_m *Transactor) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
+// QueryRowContext provides a mock function with given fields: ctx, query, args
+func (_m *Transactor) QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row {
 	var _ca []interface{}
-	_ca = append(_ca, ctx, db, query)
+	_ca = append(_ca, ctx, query)
 	_ca = append(_ca, args...)
 	ret := _m.Called(_ca...)
 
 	var r0 *sql.Row
-	if rf, ok := ret.Get(0).(func(context.Context, *sql.DB, string, ...interface{}) *sql.Row); ok {
-		r0 = rf(ctx, db, query, args...)
+	if rf, ok := ret.Get(0).(func(context.Context, string, ...interface{}) *sql.Row); ok {
+		r0 = rf(ctx, query, args...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*sql.Row)
@@ -167,23 +165,22 @@ type Transactor_QueryRowContext_Call struct {
 
 // QueryRowContext is a helper method to define mock.On call
 //  - ctx context.Context
-//  - db *sql.DB
 //  - query string
 //  - args ...interface{}
-func (_e *Transactor_Expecter) QueryRowContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_QueryRowContext_Call {
+func (_e *Transactor_Expecter) QueryRowContext(ctx interface{}, query interface{}, args ...interface{}) *Transactor_QueryRowContext_Call {
 	return &Transactor_QueryRowContext_Call{Call: _e.mock.On("QueryRowContext",
-		append([]interface{}{ctx, db, query}, args...)...)}
+		append([]interface{}{ctx, query}, args...)...)}
 }
 
-func (_c *Transactor_QueryRowContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_QueryRowContext_Call {
+func (_c *Transactor_QueryRowContext_Call) Run(run func(ctx context.Context, query string, args ...interface{})) *Transactor_QueryRowContext_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]interface{}, len(args)-3)
-		for i, a := range args[3:] {
+		variadicArgs := make([]interface{}, len(args)-2)
+		for i, a := range args[2:] {
 			if a != nil {
 				variadicArgs[i] = a.(interface{})
 			}
 		}
-		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+		run(args[0].(context.Context), args[1].(string), variadicArgs...)
 	})
 	return _c
 }
