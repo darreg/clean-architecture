@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"context"
-	"net/http"
 
+	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/domain/port"
 )
 
@@ -15,27 +15,13 @@ type Credential struct {
 func Login(
 	ctx context.Context,
 	cred Credential,
-	sessionCookieName, sessionCookieDuration string,
 	userRepository port.UserByCredentialGetter,
-	encryptor port.Encryptor,
-	cooker port.CookieWithDurationAdder,
 	hasher port.PasswordHasher,
-	w http.ResponseWriter,
-) error {
+) (*entity.User, error) {
 	user, err := userRepository.GetByCredential(ctx, cred.Login, hasher.Hash(cred.Password))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	encryptedUserID, err := encryptor.Encrypt(user.ID.String())
-	if err != nil {
-		return err
-	}
-
-	err = cooker.AddCookieWithDuration(sessionCookieName, encryptedUserID, sessionCookieDuration, w)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return user, nil
 }

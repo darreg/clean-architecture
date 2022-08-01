@@ -25,16 +25,11 @@ func RegisterHandler(a *app.App) http.Handler {
 			return
 		}
 
-		err := usecase.Registration(
+		user, err := usecase.Registration(
 			r.Context(),
 			regData,
-			a.Config.SessionCookieName,
-			a.Config.SessionCookieDuration,
 			a.UserRepository,
-			a.Encryptor,
-			a.Cooker,
 			a.Hasher,
-			w,
 		)
 		if err != nil {
 			switch {
@@ -43,6 +38,19 @@ func RegisterHandler(a *app.App) http.Handler {
 			default:
 				a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 			}
+
+			return
+		}
+
+		err = usecase.SetCookie(
+			user.ID,
+			a.Config.SessionCookieName, a.Config.SessionCookieDuration,
+			a.Encryptor,
+			a.Cooker,
+			w,
+		)
+		if err != nil {
+			a.Error(w, r, http.StatusInternalServerError, usecase.ErrInternalServerError)
 
 			return
 		}

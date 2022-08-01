@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"errors"
-	"net/http"
 
 	"github.com/alrund/yp-1-project/internal/domain/entity"
 	"github.com/alrund/yp-1-project/internal/domain/port"
@@ -18,20 +17,16 @@ type RegistrationData struct {
 func Registration(
 	ctx context.Context,
 	regData RegistrationData,
-	sessionCookieName, sessionCookieDuration string,
 	userRepository port.UserRegistrator,
-	encryptor port.Encryptor,
-	cooker port.CookieWithDurationAdder,
 	hasher port.PasswordHasher,
-	w http.ResponseWriter,
-) error {
+) (*entity.User, error) {
 	user, err := userRepository.GetByLogin(ctx, regData.Login)
 	if err != nil && !errors.Is(err, ErrUserNotFound) {
-		return err
+		return nil, err
 	}
 
 	if user != nil {
-		return ErrLoginAlreadyUse
+		return nil, ErrLoginAlreadyUse
 	}
 
 	user = &entity.User{
@@ -41,18 +36,8 @@ func Registration(
 	}
 	err = userRepository.Add(ctx, user)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	encryptedUserID, err := encryptor.Encrypt(user.ID.String())
-	if err != nil {
-		return err
-	}
-
-	err = cooker.AddCookieWithDuration(sessionCookieName, encryptedUserID, sessionCookieDuration, w)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return user, nil
 }
