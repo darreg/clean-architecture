@@ -77,6 +77,9 @@ func TestLogin(t *testing.T) {
 					Return(nil, ErrUserNotFound)
 
 				passwordHasher := mocks.NewPasswordHasher(t)
+				passwordHasher.EXPECT().
+					Hash(a.cred.Password).
+					Return(a.cred.Password)
 
 				return &m{userGetter, passwordHasher}
 			},
