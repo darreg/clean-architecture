@@ -18,6 +18,14 @@ type WithdrawRepository struct {
 	mock.Mock
 }
 
+type WithdrawRepository_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawRepository) EXPECT() *WithdrawRepository_Expecter {
+	return &WithdrawRepository_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, order
 func (_m *WithdrawRepository) Add(ctx context.Context, order *entity.Withdraw) error {
 	ret := _m.Called(ctx, order)
@@ -32,6 +40,30 @@ func (_m *WithdrawRepository) Add(ctx context.Context, order *entity.Withdraw) e
 	return r0
 }
 
+// WithdrawRepository_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type WithdrawRepository_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Withdraw
+func (_e *WithdrawRepository_Expecter) Add(ctx interface{}, order interface{}) *WithdrawRepository_Add_Call {
+	return &WithdrawRepository_Add_Call{Call: _e.mock.On("Add", ctx, order)}
+}
+
+func (_c *WithdrawRepository_Add_Call) Run(run func(ctx context.Context, order *entity.Withdraw)) *WithdrawRepository_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Withdraw))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_Add_Call) Return(_a0 error) *WithdrawRepository_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // Change provides a mock function with given fields: ctx, order
 func (_m *WithdrawRepository) Change(ctx context.Context, order *entity.Withdraw) error {
 	ret := _m.Called(ctx, order)
@@ -44,6 +76,30 @@ func (_m *WithdrawRepository) Change(ctx context.Context, order *entity.Withdraw
 	}
 
 	return r0
+}
+
+// WithdrawRepository_Change_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Change'
+type WithdrawRepository_Change_Call struct {
+	*mock.Call
+}
+
+// Change is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Withdraw
+func (_e *WithdrawRepository_Expecter) Change(ctx interface{}, order interface{}) *WithdrawRepository_Change_Call {
+	return &WithdrawRepository_Change_Call{Call: _e.mock.On("Change", ctx, order)}
+}
+
+func (_c *WithdrawRepository_Change_Call) Run(run func(ctx context.Context, order *entity.Withdraw)) *WithdrawRepository_Change_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Withdraw))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_Change_Call) Return(_a0 error) *WithdrawRepository_Change_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 // ExecContext provides a mock function with given fields: ctx, db, query, args
@@ -72,6 +128,39 @@ func (_m *WithdrawRepository) ExecContext(ctx context.Context, db *sql.DB, query
 	return r0, r1
 }
 
+// WithdrawRepository_ExecContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExecContext'
+type WithdrawRepository_ExecContext_Call struct {
+	*mock.Call
+}
+
+// ExecContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *WithdrawRepository_Expecter) ExecContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *WithdrawRepository_ExecContext_Call {
+	return &WithdrawRepository_ExecContext_Call{Call: _e.mock.On("ExecContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *WithdrawRepository_ExecContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *WithdrawRepository_ExecContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_ExecContext_Call) Return(_a0 sql.Result, _a1 error) *WithdrawRepository_ExecContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // Get provides a mock function with given fields: ctx, withdrawID
 func (_m *WithdrawRepository) Get(ctx context.Context, withdrawID uuid.UUID) (*entity.Withdraw, error) {
 	ret := _m.Called(ctx, withdrawID)
@@ -93,6 +182,30 @@ func (_m *WithdrawRepository) Get(ctx context.Context, withdrawID uuid.UUID) (*e
 	}
 
 	return r0, r1
+}
+
+// WithdrawRepository_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type WithdrawRepository_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//  - ctx context.Context
+//  - withdrawID uuid.UUID
+func (_e *WithdrawRepository_Expecter) Get(ctx interface{}, withdrawID interface{}) *WithdrawRepository_Get_Call {
+	return &WithdrawRepository_Get_Call{Call: _e.mock.On("Get", ctx, withdrawID)}
+}
+
+func (_c *WithdrawRepository_Get_Call) Run(run func(ctx context.Context, withdrawID uuid.UUID)) *WithdrawRepository_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_Get_Call) Return(_a0 *entity.Withdraw, _a1 error) *WithdrawRepository_Get_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 // GetAllByUser provides a mock function with given fields: ctx, user
@@ -118,6 +231,30 @@ func (_m *WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.Use
 	return r0, r1
 }
 
+// WithdrawRepository_GetAllByUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllByUser'
+type WithdrawRepository_GetAllByUser_Call struct {
+	*mock.Call
+}
+
+// GetAllByUser is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *WithdrawRepository_Expecter) GetAllByUser(ctx interface{}, user interface{}) *WithdrawRepository_GetAllByUser_Call {
+	return &WithdrawRepository_GetAllByUser_Call{Call: _e.mock.On("GetAllByUser", ctx, user)}
+}
+
+func (_c *WithdrawRepository_GetAllByUser_Call) Run(run func(ctx context.Context, user *entity.User)) *WithdrawRepository_GetAllByUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_GetAllByUser_Call) Return(_a0 []*entity.Withdraw, _a1 error) *WithdrawRepository_GetAllByUser_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // GetWithdrawn provides a mock function with given fields: ctx, user
 func (_m *WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User) (float32, error) {
 	ret := _m.Called(ctx, user)
@@ -137,6 +274,30 @@ func (_m *WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.Use
 	}
 
 	return r0, r1
+}
+
+// WithdrawRepository_GetWithdrawn_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetWithdrawn'
+type WithdrawRepository_GetWithdrawn_Call struct {
+	*mock.Call
+}
+
+// GetWithdrawn is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *WithdrawRepository_Expecter) GetWithdrawn(ctx interface{}, user interface{}) *WithdrawRepository_GetWithdrawn_Call {
+	return &WithdrawRepository_GetWithdrawn_Call{Call: _e.mock.On("GetWithdrawn", ctx, user)}
+}
+
+func (_c *WithdrawRepository_GetWithdrawn_Call) Run(run func(ctx context.Context, user *entity.User)) *WithdrawRepository_GetWithdrawn_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_GetWithdrawn_Call) Return(_a0 float32, _a1 error) *WithdrawRepository_GetWithdrawn_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 // QueryContext provides a mock function with given fields: ctx, db, query, args
@@ -165,6 +326,39 @@ func (_m *WithdrawRepository) QueryContext(ctx context.Context, db *sql.DB, quer
 	return r0, r1
 }
 
+// WithdrawRepository_QueryContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryContext'
+type WithdrawRepository_QueryContext_Call struct {
+	*mock.Call
+}
+
+// QueryContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *WithdrawRepository_Expecter) QueryContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *WithdrawRepository_QueryContext_Call {
+	return &WithdrawRepository_QueryContext_Call{Call: _e.mock.On("QueryContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *WithdrawRepository_QueryContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *WithdrawRepository_QueryContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_QueryContext_Call) Return(_a0 *sql.Rows, _a1 error) *WithdrawRepository_QueryContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // QueryRowContext provides a mock function with given fields: ctx, db, query, args
 func (_m *WithdrawRepository) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
 	var _ca []interface{}
@@ -184,6 +378,39 @@ func (_m *WithdrawRepository) QueryRowContext(ctx context.Context, db *sql.DB, q
 	return r0
 }
 
+// WithdrawRepository_QueryRowContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryRowContext'
+type WithdrawRepository_QueryRowContext_Call struct {
+	*mock.Call
+}
+
+// QueryRowContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *WithdrawRepository_Expecter) QueryRowContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *WithdrawRepository_QueryRowContext_Call {
+	return &WithdrawRepository_QueryRowContext_Call{Call: _e.mock.On("QueryRowContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *WithdrawRepository_QueryRowContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *WithdrawRepository_QueryRowContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_QueryRowContext_Call) Return(_a0 *sql.Row) *WithdrawRepository_QueryRowContext_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // Remove provides a mock function with given fields: ctx, withdrawID
 func (_m *WithdrawRepository) Remove(ctx context.Context, withdrawID uuid.UUID) error {
 	ret := _m.Called(ctx, withdrawID)
@@ -198,6 +425,30 @@ func (_m *WithdrawRepository) Remove(ctx context.Context, withdrawID uuid.UUID) 
 	return r0
 }
 
+// WithdrawRepository_Remove_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Remove'
+type WithdrawRepository_Remove_Call struct {
+	*mock.Call
+}
+
+// Remove is a helper method to define mock.On call
+//  - ctx context.Context
+//  - withdrawID uuid.UUID
+func (_e *WithdrawRepository_Expecter) Remove(ctx interface{}, withdrawID interface{}) *WithdrawRepository_Remove_Call {
+	return &WithdrawRepository_Remove_Call{Call: _e.mock.On("Remove", ctx, withdrawID)}
+}
+
+func (_c *WithdrawRepository_Remove_Call) Run(run func(ctx context.Context, withdrawID uuid.UUID)) *WithdrawRepository_Remove_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_Remove_Call) Return(_a0 error) *WithdrawRepository_Remove_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // WithinTransaction provides a mock function with given fields: ctx, tFunc
 func (_m *WithdrawRepository) WithinTransaction(ctx context.Context, tFunc func(context.Context) error) error {
 	ret := _m.Called(ctx, tFunc)
@@ -210,6 +461,30 @@ func (_m *WithdrawRepository) WithinTransaction(ctx context.Context, tFunc func(
 	}
 
 	return r0
+}
+
+// WithdrawRepository_WithinTransaction_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithinTransaction'
+type WithdrawRepository_WithinTransaction_Call struct {
+	*mock.Call
+}
+
+// WithinTransaction is a helper method to define mock.On call
+//  - ctx context.Context
+//  - tFunc func(context.Context) error
+func (_e *WithdrawRepository_Expecter) WithinTransaction(ctx interface{}, tFunc interface{}) *WithdrawRepository_WithinTransaction_Call {
+	return &WithdrawRepository_WithinTransaction_Call{Call: _e.mock.On("WithinTransaction", ctx, tFunc)}
+}
+
+func (_c *WithdrawRepository_WithinTransaction_Call) Run(run func(ctx context.Context, tFunc func(context.Context) error)) *WithdrawRepository_WithinTransaction_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(func(context.Context) error))
+	})
+	return _c
+}
+
+func (_c *WithdrawRepository_WithinTransaction_Call) Return(_a0 error) *WithdrawRepository_WithinTransaction_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawRepository interface {

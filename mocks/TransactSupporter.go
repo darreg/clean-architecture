@@ -13,6 +13,14 @@ type TransactSupporter struct {
 	mock.Mock
 }
 
+type TransactSupporter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *TransactSupporter) EXPECT() *TransactSupporter_Expecter {
+	return &TransactSupporter_Expecter{mock: &_m.Mock}
+}
+
 // WithinTransaction provides a mock function with given fields: ctx, tFunc
 func (_m *TransactSupporter) WithinTransaction(ctx context.Context, tFunc func(context.Context) error) error {
 	ret := _m.Called(ctx, tFunc)
@@ -25,6 +33,30 @@ func (_m *TransactSupporter) WithinTransaction(ctx context.Context, tFunc func(c
 	}
 
 	return r0
+}
+
+// TransactSupporter_WithinTransaction_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithinTransaction'
+type TransactSupporter_WithinTransaction_Call struct {
+	*mock.Call
+}
+
+// WithinTransaction is a helper method to define mock.On call
+//  - ctx context.Context
+//  - tFunc func(context.Context) error
+func (_e *TransactSupporter_Expecter) WithinTransaction(ctx interface{}, tFunc interface{}) *TransactSupporter_WithinTransaction_Call {
+	return &TransactSupporter_WithinTransaction_Call{Call: _e.mock.On("WithinTransaction", ctx, tFunc)}
+}
+
+func (_c *TransactSupporter_WithinTransaction_Call) Run(run func(ctx context.Context, tFunc func(context.Context) error)) *TransactSupporter_WithinTransaction_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(func(context.Context) error))
+	})
+	return _c
+}
+
+func (_c *TransactSupporter_WithinTransaction_Call) Return(_a0 error) *TransactSupporter_WithinTransaction_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewTransactSupporter interface {

@@ -14,6 +14,14 @@ type OrderWithCheckChanger struct {
 	mock.Mock
 }
 
+type OrderWithCheckChanger_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *OrderWithCheckChanger) EXPECT() *OrderWithCheckChanger_Expecter {
+	return &OrderWithCheckChanger_Expecter{mock: &_m.Mock}
+}
+
 // Change provides a mock function with given fields: ctx, order
 func (_m *OrderWithCheckChanger) Change(ctx context.Context, order *entity.Order) error {
 	ret := _m.Called(ctx, order)
@@ -26,6 +34,30 @@ func (_m *OrderWithCheckChanger) Change(ctx context.Context, order *entity.Order
 	}
 
 	return r0
+}
+
+// OrderWithCheckChanger_Change_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Change'
+type OrderWithCheckChanger_Change_Call struct {
+	*mock.Call
+}
+
+// Change is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Order
+func (_e *OrderWithCheckChanger_Expecter) Change(ctx interface{}, order interface{}) *OrderWithCheckChanger_Change_Call {
+	return &OrderWithCheckChanger_Change_Call{Call: _e.mock.On("Change", ctx, order)}
+}
+
+func (_c *OrderWithCheckChanger_Change_Call) Run(run func(ctx context.Context, order *entity.Order)) *OrderWithCheckChanger_Change_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Order))
+	})
+	return _c
+}
+
+func (_c *OrderWithCheckChanger_Change_Call) Return(_a0 error) *OrderWithCheckChanger_Change_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 // Get provides a mock function with given fields: ctx, number
@@ -49,6 +81,30 @@ func (_m *OrderWithCheckChanger) Get(ctx context.Context, number string) (*entit
 	}
 
 	return r0, r1
+}
+
+// OrderWithCheckChanger_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type OrderWithCheckChanger_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//  - ctx context.Context
+//  - number string
+func (_e *OrderWithCheckChanger_Expecter) Get(ctx interface{}, number interface{}) *OrderWithCheckChanger_Get_Call {
+	return &OrderWithCheckChanger_Get_Call{Call: _e.mock.On("Get", ctx, number)}
+}
+
+func (_c *OrderWithCheckChanger_Get_Call) Run(run func(ctx context.Context, number string)) *OrderWithCheckChanger_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *OrderWithCheckChanger_Get_Call) Return(_a0 *entity.Order, _a1 error) *OrderWithCheckChanger_Get_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewOrderWithCheckChanger interface {

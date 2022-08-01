@@ -9,6 +9,14 @@ type Encryptor struct {
 	mock.Mock
 }
 
+type Encryptor_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Encryptor) EXPECT() *Encryptor_Expecter {
+	return &Encryptor_Expecter{mock: &_m.Mock}
+}
+
 // Decrypt provides a mock function with given fields: encrypted
 func (_m *Encryptor) Decrypt(encrypted string) (string, error) {
 	ret := _m.Called(encrypted)
@@ -30,6 +38,29 @@ func (_m *Encryptor) Decrypt(encrypted string) (string, error) {
 	return r0, r1
 }
 
+// Encryptor_Decrypt_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Decrypt'
+type Encryptor_Decrypt_Call struct {
+	*mock.Call
+}
+
+// Decrypt is a helper method to define mock.On call
+//  - encrypted string
+func (_e *Encryptor_Expecter) Decrypt(encrypted interface{}) *Encryptor_Decrypt_Call {
+	return &Encryptor_Decrypt_Call{Call: _e.mock.On("Decrypt", encrypted)}
+}
+
+func (_c *Encryptor_Decrypt_Call) Run(run func(encrypted string)) *Encryptor_Decrypt_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *Encryptor_Decrypt_Call) Return(_a0 string, _a1 error) *Encryptor_Decrypt_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // Encrypt provides a mock function with given fields: data
 func (_m *Encryptor) Encrypt(data string) (string, error) {
 	ret := _m.Called(data)
@@ -49,6 +80,29 @@ func (_m *Encryptor) Encrypt(data string) (string, error) {
 	}
 
 	return r0, r1
+}
+
+// Encryptor_Encrypt_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Encrypt'
+type Encryptor_Encrypt_Call struct {
+	*mock.Call
+}
+
+// Encrypt is a helper method to define mock.On call
+//  - data string
+func (_e *Encryptor_Expecter) Encrypt(data interface{}) *Encryptor_Encrypt_Call {
+	return &Encryptor_Encrypt_Call{Call: _e.mock.On("Encrypt", data)}
+}
+
+func (_c *Encryptor_Encrypt_Call) Run(run func(data string)) *Encryptor_Encrypt_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *Encryptor_Encrypt_Call) Return(_a0 string, _a1 error) *Encryptor_Encrypt_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewEncryptor interface {

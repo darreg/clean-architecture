@@ -15,6 +15,14 @@ type Transactor struct {
 	mock.Mock
 }
 
+type Transactor_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Transactor) EXPECT() *Transactor_Expecter {
+	return &Transactor_Expecter{mock: &_m.Mock}
+}
+
 // ExecContext provides a mock function with given fields: ctx, db, query, args
 func (_m *Transactor) ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
 	var _ca []interface{}
@@ -39,6 +47,39 @@ func (_m *Transactor) ExecContext(ctx context.Context, db *sql.DB, query string,
 	}
 
 	return r0, r1
+}
+
+// Transactor_ExecContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExecContext'
+type Transactor_ExecContext_Call struct {
+	*mock.Call
+}
+
+// ExecContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *Transactor_Expecter) ExecContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_ExecContext_Call {
+	return &Transactor_ExecContext_Call{Call: _e.mock.On("ExecContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *Transactor_ExecContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_ExecContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *Transactor_ExecContext_Call) Return(_a0 sql.Result, _a1 error) *Transactor_ExecContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 // QueryContext provides a mock function with given fields: ctx, db, query, args
@@ -67,6 +108,39 @@ func (_m *Transactor) QueryContext(ctx context.Context, db *sql.DB, query string
 	return r0, r1
 }
 
+// Transactor_QueryContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryContext'
+type Transactor_QueryContext_Call struct {
+	*mock.Call
+}
+
+// QueryContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *Transactor_Expecter) QueryContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_QueryContext_Call {
+	return &Transactor_QueryContext_Call{Call: _e.mock.On("QueryContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *Transactor_QueryContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_QueryContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *Transactor_QueryContext_Call) Return(_a0 *sql.Rows, _a1 error) *Transactor_QueryContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
 // QueryRowContext provides a mock function with given fields: ctx, db, query, args
 func (_m *Transactor) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
 	var _ca []interface{}
@@ -86,6 +160,39 @@ func (_m *Transactor) QueryRowContext(ctx context.Context, db *sql.DB, query str
 	return r0
 }
 
+// Transactor_QueryRowContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryRowContext'
+type Transactor_QueryRowContext_Call struct {
+	*mock.Call
+}
+
+// QueryRowContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *Transactor_Expecter) QueryRowContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Transactor_QueryRowContext_Call {
+	return &Transactor_QueryRowContext_Call{Call: _e.mock.On("QueryRowContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *Transactor_QueryRowContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Transactor_QueryRowContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *Transactor_QueryRowContext_Call) Return(_a0 *sql.Row) *Transactor_QueryRowContext_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // WithinTransaction provides a mock function with given fields: ctx, tFunc
 func (_m *Transactor) WithinTransaction(ctx context.Context, tFunc func(context.Context) error) error {
 	ret := _m.Called(ctx, tFunc)
@@ -98,6 +205,30 @@ func (_m *Transactor) WithinTransaction(ctx context.Context, tFunc func(context.
 	}
 
 	return r0
+}
+
+// Transactor_WithinTransaction_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithinTransaction'
+type Transactor_WithinTransaction_Call struct {
+	*mock.Call
+}
+
+// WithinTransaction is a helper method to define mock.On call
+//  - ctx context.Context
+//  - tFunc func(context.Context) error
+func (_e *Transactor_Expecter) WithinTransaction(ctx interface{}, tFunc interface{}) *Transactor_WithinTransaction_Call {
+	return &Transactor_WithinTransaction_Call{Call: _e.mock.On("WithinTransaction", ctx, tFunc)}
+}
+
+func (_c *Transactor_WithinTransaction_Call) Run(run func(ctx context.Context, tFunc func(context.Context) error)) *Transactor_WithinTransaction_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(func(context.Context) error))
+	})
+	return _c
+}
+
+func (_c *Transactor_WithinTransaction_Call) Return(_a0 error) *Transactor_WithinTransaction_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewTransactor interface {

@@ -14,6 +14,14 @@ type WithdrawTransactionalAdder struct {
 	mock.Mock
 }
 
+type WithdrawTransactionalAdder_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawTransactionalAdder) EXPECT() *WithdrawTransactionalAdder_Expecter {
+	return &WithdrawTransactionalAdder_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, order
 func (_m *WithdrawTransactionalAdder) Add(ctx context.Context, order *entity.Withdraw) error {
 	ret := _m.Called(ctx, order)
@@ -28,6 +36,30 @@ func (_m *WithdrawTransactionalAdder) Add(ctx context.Context, order *entity.Wit
 	return r0
 }
 
+// WithdrawTransactionalAdder_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type WithdrawTransactionalAdder_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Withdraw
+func (_e *WithdrawTransactionalAdder_Expecter) Add(ctx interface{}, order interface{}) *WithdrawTransactionalAdder_Add_Call {
+	return &WithdrawTransactionalAdder_Add_Call{Call: _e.mock.On("Add", ctx, order)}
+}
+
+func (_c *WithdrawTransactionalAdder_Add_Call) Run(run func(ctx context.Context, order *entity.Withdraw)) *WithdrawTransactionalAdder_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Withdraw))
+	})
+	return _c
+}
+
+func (_c *WithdrawTransactionalAdder_Add_Call) Return(_a0 error) *WithdrawTransactionalAdder_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // WithinTransaction provides a mock function with given fields: ctx, tFunc
 func (_m *WithdrawTransactionalAdder) WithinTransaction(ctx context.Context, tFunc func(context.Context) error) error {
 	ret := _m.Called(ctx, tFunc)
@@ -40,6 +72,30 @@ func (_m *WithdrawTransactionalAdder) WithinTransaction(ctx context.Context, tFu
 	}
 
 	return r0
+}
+
+// WithdrawTransactionalAdder_WithinTransaction_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithinTransaction'
+type WithdrawTransactionalAdder_WithinTransaction_Call struct {
+	*mock.Call
+}
+
+// WithinTransaction is a helper method to define mock.On call
+//  - ctx context.Context
+//  - tFunc func(context.Context) error
+func (_e *WithdrawTransactionalAdder_Expecter) WithinTransaction(ctx interface{}, tFunc interface{}) *WithdrawTransactionalAdder_WithinTransaction_Call {
+	return &WithdrawTransactionalAdder_WithinTransaction_Call{Call: _e.mock.On("WithinTransaction", ctx, tFunc)}
+}
+
+func (_c *WithdrawTransactionalAdder_WithinTransaction_Call) Run(run func(ctx context.Context, tFunc func(context.Context) error)) *WithdrawTransactionalAdder_WithinTransaction_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(func(context.Context) error))
+	})
+	return _c
+}
+
+func (_c *WithdrawTransactionalAdder_WithinTransaction_Call) Return(_a0 error) *WithdrawTransactionalAdder_WithinTransaction_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawTransactionalAdder interface {

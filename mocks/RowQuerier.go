@@ -15,6 +15,14 @@ type RowQuerier struct {
 	mock.Mock
 }
 
+type RowQuerier_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *RowQuerier) EXPECT() *RowQuerier_Expecter {
+	return &RowQuerier_Expecter{mock: &_m.Mock}
+}
+
 // QueryRowContext provides a mock function with given fields: ctx, db, query, args
 func (_m *RowQuerier) QueryRowContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) *sql.Row {
 	var _ca []interface{}
@@ -32,6 +40,39 @@ func (_m *RowQuerier) QueryRowContext(ctx context.Context, db *sql.DB, query str
 	}
 
 	return r0
+}
+
+// RowQuerier_QueryRowContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryRowContext'
+type RowQuerier_QueryRowContext_Call struct {
+	*mock.Call
+}
+
+// QueryRowContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *RowQuerier_Expecter) QueryRowContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *RowQuerier_QueryRowContext_Call {
+	return &RowQuerier_QueryRowContext_Call{Call: _e.mock.On("QueryRowContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *RowQuerier_QueryRowContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *RowQuerier_QueryRowContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *RowQuerier_QueryRowContext_Call) Return(_a0 *sql.Row) *RowQuerier_QueryRowContext_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewRowQuerier interface {

@@ -15,6 +15,14 @@ type Execer struct {
 	mock.Mock
 }
 
+type Execer_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Execer) EXPECT() *Execer_Expecter {
+	return &Execer_Expecter{mock: &_m.Mock}
+}
+
 // ExecContext provides a mock function with given fields: ctx, db, query, args
 func (_m *Execer) ExecContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (sql.Result, error) {
 	var _ca []interface{}
@@ -39,6 +47,39 @@ func (_m *Execer) ExecContext(ctx context.Context, db *sql.DB, query string, arg
 	}
 
 	return r0, r1
+}
+
+// Execer_ExecContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ExecContext'
+type Execer_ExecContext_Call struct {
+	*mock.Call
+}
+
+// ExecContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *Execer_Expecter) ExecContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Execer_ExecContext_Call {
+	return &Execer_ExecContext_Call{Call: _e.mock.On("ExecContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *Execer_ExecContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Execer_ExecContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *Execer_ExecContext_Call) Return(_a0 sql.Result, _a1 error) *Execer_ExecContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewExecer interface {

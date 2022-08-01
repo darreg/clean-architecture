@@ -14,6 +14,14 @@ type OrderAdder struct {
 	mock.Mock
 }
 
+type OrderAdder_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *OrderAdder) EXPECT() *OrderAdder_Expecter {
+	return &OrderAdder_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, order
 func (_m *OrderAdder) Add(ctx context.Context, order *entity.Order) error {
 	ret := _m.Called(ctx, order)
@@ -26,6 +34,30 @@ func (_m *OrderAdder) Add(ctx context.Context, order *entity.Order) error {
 	}
 
 	return r0
+}
+
+// OrderAdder_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type OrderAdder_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Order
+func (_e *OrderAdder_Expecter) Add(ctx interface{}, order interface{}) *OrderAdder_Add_Call {
+	return &OrderAdder_Add_Call{Call: _e.mock.On("Add", ctx, order)}
+}
+
+func (_c *OrderAdder_Add_Call) Run(run func(ctx context.Context, order *entity.Order)) *OrderAdder_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Order))
+	})
+	return _c
+}
+
+func (_c *OrderAdder_Add_Call) Return(_a0 error) *OrderAdder_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewOrderAdder interface {

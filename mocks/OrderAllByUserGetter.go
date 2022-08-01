@@ -14,6 +14,14 @@ type OrderAllByUserGetter struct {
 	mock.Mock
 }
 
+type OrderAllByUserGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *OrderAllByUserGetter) EXPECT() *OrderAllByUserGetter_Expecter {
+	return &OrderAllByUserGetter_Expecter{mock: &_m.Mock}
+}
+
 // GetAllByUser provides a mock function with given fields: ctx, user
 func (_m *OrderAllByUserGetter) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error) {
 	ret := _m.Called(ctx, user)
@@ -35,6 +43,30 @@ func (_m *OrderAllByUserGetter) GetAllByUser(ctx context.Context, user *entity.U
 	}
 
 	return r0, r1
+}
+
+// OrderAllByUserGetter_GetAllByUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllByUser'
+type OrderAllByUserGetter_GetAllByUser_Call struct {
+	*mock.Call
+}
+
+// GetAllByUser is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *OrderAllByUserGetter_Expecter) GetAllByUser(ctx interface{}, user interface{}) *OrderAllByUserGetter_GetAllByUser_Call {
+	return &OrderAllByUserGetter_GetAllByUser_Call{Call: _e.mock.On("GetAllByUser", ctx, user)}
+}
+
+func (_c *OrderAllByUserGetter_GetAllByUser_Call) Run(run func(ctx context.Context, user *entity.User)) *OrderAllByUserGetter_GetAllByUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *OrderAllByUserGetter_GetAllByUser_Call) Return(_a0 []*entity.Order, _a1 error) *OrderAllByUserGetter_GetAllByUser_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewOrderAllByUserGetter interface {

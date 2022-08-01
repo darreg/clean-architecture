@@ -14,6 +14,14 @@ type UserByLoginGetter struct {
 	mock.Mock
 }
 
+type UserByLoginGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserByLoginGetter) EXPECT() *UserByLoginGetter_Expecter {
+	return &UserByLoginGetter_Expecter{mock: &_m.Mock}
+}
+
 // GetByLogin provides a mock function with given fields: ctx, login
 func (_m *UserByLoginGetter) GetByLogin(ctx context.Context, login string) (*entity.User, error) {
 	ret := _m.Called(ctx, login)
@@ -35,6 +43,30 @@ func (_m *UserByLoginGetter) GetByLogin(ctx context.Context, login string) (*ent
 	}
 
 	return r0, r1
+}
+
+// UserByLoginGetter_GetByLogin_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByLogin'
+type UserByLoginGetter_GetByLogin_Call struct {
+	*mock.Call
+}
+
+// GetByLogin is a helper method to define mock.On call
+//  - ctx context.Context
+//  - login string
+func (_e *UserByLoginGetter_Expecter) GetByLogin(ctx interface{}, login interface{}) *UserByLoginGetter_GetByLogin_Call {
+	return &UserByLoginGetter_GetByLogin_Call{Call: _e.mock.On("GetByLogin", ctx, login)}
+}
+
+func (_c *UserByLoginGetter_GetByLogin_Call) Run(run func(ctx context.Context, login string)) *UserByLoginGetter_GetByLogin_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *UserByLoginGetter_GetByLogin_Call) Return(_a0 *entity.User, _a1 error) *UserByLoginGetter_GetByLogin_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewUserByLoginGetter interface {

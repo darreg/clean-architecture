@@ -15,6 +15,14 @@ type Querier struct {
 	mock.Mock
 }
 
+type Querier_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Querier) EXPECT() *Querier_Expecter {
+	return &Querier_Expecter{mock: &_m.Mock}
+}
+
 // QueryContext provides a mock function with given fields: ctx, db, query, args
 func (_m *Querier) QueryContext(ctx context.Context, db *sql.DB, query string, args ...interface{}) (*sql.Rows, error) {
 	var _ca []interface{}
@@ -39,6 +47,39 @@ func (_m *Querier) QueryContext(ctx context.Context, db *sql.DB, query string, a
 	}
 
 	return r0, r1
+}
+
+// Querier_QueryContext_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'QueryContext'
+type Querier_QueryContext_Call struct {
+	*mock.Call
+}
+
+// QueryContext is a helper method to define mock.On call
+//  - ctx context.Context
+//  - db *sql.DB
+//  - query string
+//  - args ...interface{}
+func (_e *Querier_Expecter) QueryContext(ctx interface{}, db interface{}, query interface{}, args ...interface{}) *Querier_QueryContext_Call {
+	return &Querier_QueryContext_Call{Call: _e.mock.On("QueryContext",
+		append([]interface{}{ctx, db, query}, args...)...)}
+}
+
+func (_c *Querier_QueryContext_Call) Run(run func(ctx context.Context, db *sql.DB, query string, args ...interface{})) *Querier_QueryContext_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]interface{}, len(args)-3)
+		for i, a := range args[3:] {
+			if a != nil {
+				variadicArgs[i] = a.(interface{})
+			}
+		}
+		run(args[0].(context.Context), args[1].(*sql.DB), args[2].(string), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *Querier_QueryContext_Call) Return(_a0 *sql.Rows, _a1 error) *Querier_QueryContext_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewQuerier interface {

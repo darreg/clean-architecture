@@ -14,6 +14,14 @@ type OrderGetter struct {
 	mock.Mock
 }
 
+type OrderGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *OrderGetter) EXPECT() *OrderGetter_Expecter {
+	return &OrderGetter_Expecter{mock: &_m.Mock}
+}
+
 // Get provides a mock function with given fields: ctx, number
 func (_m *OrderGetter) Get(ctx context.Context, number string) (*entity.Order, error) {
 	ret := _m.Called(ctx, number)
@@ -35,6 +43,30 @@ func (_m *OrderGetter) Get(ctx context.Context, number string) (*entity.Order, e
 	}
 
 	return r0, r1
+}
+
+// OrderGetter_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type OrderGetter_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//  - ctx context.Context
+//  - number string
+func (_e *OrderGetter_Expecter) Get(ctx interface{}, number interface{}) *OrderGetter_Get_Call {
+	return &OrderGetter_Get_Call{Call: _e.mock.On("Get", ctx, number)}
+}
+
+func (_c *OrderGetter_Get_Call) Run(run func(ctx context.Context, number string)) *OrderGetter_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *OrderGetter_Get_Call) Return(_a0 *entity.Order, _a1 error) *OrderGetter_Get_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewOrderGetter interface {

@@ -9,6 +9,14 @@ type PasswordHasher struct {
 	mock.Mock
 }
 
+type PasswordHasher_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *PasswordHasher) EXPECT() *PasswordHasher_Expecter {
+	return &PasswordHasher_Expecter{mock: &_m.Mock}
+}
+
 // Hash provides a mock function with given fields: password
 func (_m *PasswordHasher) Hash(password string) string {
 	ret := _m.Called(password)
@@ -21,6 +29,29 @@ func (_m *PasswordHasher) Hash(password string) string {
 	}
 
 	return r0
+}
+
+// PasswordHasher_Hash_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Hash'
+type PasswordHasher_Hash_Call struct {
+	*mock.Call
+}
+
+// Hash is a helper method to define mock.On call
+//  - password string
+func (_e *PasswordHasher_Expecter) Hash(password interface{}) *PasswordHasher_Hash_Call {
+	return &PasswordHasher_Hash_Call{Call: _e.mock.On("Hash", password)}
+}
+
+func (_c *PasswordHasher_Hash_Call) Run(run func(password string)) *PasswordHasher_Hash_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string))
+	})
+	return _c
+}
+
+func (_c *PasswordHasher_Hash_Call) Return(_a0 string) *PasswordHasher_Hash_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewPasswordHasher interface {

@@ -15,6 +15,14 @@ type UserRemover struct {
 	mock.Mock
 }
 
+type UserRemover_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserRemover) EXPECT() *UserRemover_Expecter {
+	return &UserRemover_Expecter{mock: &_m.Mock}
+}
+
 // Remove provides a mock function with given fields: ctx, userID
 func (_m *UserRemover) Remove(ctx context.Context, userID uuid.UUID) error {
 	ret := _m.Called(ctx, userID)
@@ -27,6 +35,30 @@ func (_m *UserRemover) Remove(ctx context.Context, userID uuid.UUID) error {
 	}
 
 	return r0
+}
+
+// UserRemover_Remove_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Remove'
+type UserRemover_Remove_Call struct {
+	*mock.Call
+}
+
+// Remove is a helper method to define mock.On call
+//  - ctx context.Context
+//  - userID uuid.UUID
+func (_e *UserRemover_Expecter) Remove(ctx interface{}, userID interface{}) *UserRemover_Remove_Call {
+	return &UserRemover_Remove_Call{Call: _e.mock.On("Remove", ctx, userID)}
+}
+
+func (_c *UserRemover_Remove_Call) Run(run func(ctx context.Context, userID uuid.UUID)) *UserRemover_Remove_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *UserRemover_Remove_Call) Return(_a0 error) *UserRemover_Remove_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserRemover interface {

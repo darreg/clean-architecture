@@ -14,6 +14,14 @@ type WithdrawChanger struct {
 	mock.Mock
 }
 
+type WithdrawChanger_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawChanger) EXPECT() *WithdrawChanger_Expecter {
+	return &WithdrawChanger_Expecter{mock: &_m.Mock}
+}
+
 // Change provides a mock function with given fields: ctx, order
 func (_m *WithdrawChanger) Change(ctx context.Context, order *entity.Withdraw) error {
 	ret := _m.Called(ctx, order)
@@ -26,6 +34,30 @@ func (_m *WithdrawChanger) Change(ctx context.Context, order *entity.Withdraw) e
 	}
 
 	return r0
+}
+
+// WithdrawChanger_Change_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Change'
+type WithdrawChanger_Change_Call struct {
+	*mock.Call
+}
+
+// Change is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Withdraw
+func (_e *WithdrawChanger_Expecter) Change(ctx interface{}, order interface{}) *WithdrawChanger_Change_Call {
+	return &WithdrawChanger_Change_Call{Call: _e.mock.On("Change", ctx, order)}
+}
+
+func (_c *WithdrawChanger_Change_Call) Run(run func(ctx context.Context, order *entity.Withdraw)) *WithdrawChanger_Change_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Withdraw))
+	})
+	return _c
+}
+
+func (_c *WithdrawChanger_Change_Call) Return(_a0 error) *WithdrawChanger_Change_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawChanger interface {

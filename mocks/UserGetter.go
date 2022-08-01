@@ -16,6 +16,14 @@ type UserGetter struct {
 	mock.Mock
 }
 
+type UserGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserGetter) EXPECT() *UserGetter_Expecter {
+	return &UserGetter_Expecter{mock: &_m.Mock}
+}
+
 // Get provides a mock function with given fields: ctx, userID
 func (_m *UserGetter) Get(ctx context.Context, userID uuid.UUID) (*entity.User, error) {
 	ret := _m.Called(ctx, userID)
@@ -37,6 +45,30 @@ func (_m *UserGetter) Get(ctx context.Context, userID uuid.UUID) (*entity.User, 
 	}
 
 	return r0, r1
+}
+
+// UserGetter_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type UserGetter_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//  - ctx context.Context
+//  - userID uuid.UUID
+func (_e *UserGetter_Expecter) Get(ctx interface{}, userID interface{}) *UserGetter_Get_Call {
+	return &UserGetter_Get_Call{Call: _e.mock.On("Get", ctx, userID)}
+}
+
+func (_c *UserGetter_Get_Call) Run(run func(ctx context.Context, userID uuid.UUID)) *UserGetter_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *UserGetter_Get_Call) Return(_a0 *entity.User, _a1 error) *UserGetter_Get_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewUserGetter interface {

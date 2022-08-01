@@ -14,6 +14,14 @@ type UserRegistrator struct {
 	mock.Mock
 }
 
+type UserRegistrator_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserRegistrator) EXPECT() *UserRegistrator_Expecter {
+	return &UserRegistrator_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, user
 func (_m *UserRegistrator) Add(ctx context.Context, user *entity.User) error {
 	ret := _m.Called(ctx, user)
@@ -26,6 +34,30 @@ func (_m *UserRegistrator) Add(ctx context.Context, user *entity.User) error {
 	}
 
 	return r0
+}
+
+// UserRegistrator_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type UserRegistrator_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *UserRegistrator_Expecter) Add(ctx interface{}, user interface{}) *UserRegistrator_Add_Call {
+	return &UserRegistrator_Add_Call{Call: _e.mock.On("Add", ctx, user)}
+}
+
+func (_c *UserRegistrator_Add_Call) Run(run func(ctx context.Context, user *entity.User)) *UserRegistrator_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *UserRegistrator_Add_Call) Return(_a0 error) *UserRegistrator_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 // GetByLogin provides a mock function with given fields: ctx, login
@@ -49,6 +81,30 @@ func (_m *UserRegistrator) GetByLogin(ctx context.Context, login string) (*entit
 	}
 
 	return r0, r1
+}
+
+// UserRegistrator_GetByLogin_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByLogin'
+type UserRegistrator_GetByLogin_Call struct {
+	*mock.Call
+}
+
+// GetByLogin is a helper method to define mock.On call
+//  - ctx context.Context
+//  - login string
+func (_e *UserRegistrator_Expecter) GetByLogin(ctx interface{}, login interface{}) *UserRegistrator_GetByLogin_Call {
+	return &UserRegistrator_GetByLogin_Call{Call: _e.mock.On("GetByLogin", ctx, login)}
+}
+
+func (_c *UserRegistrator_GetByLogin_Call) Run(run func(ctx context.Context, login string)) *UserRegistrator_GetByLogin_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *UserRegistrator_GetByLogin_Call) Return(_a0 *entity.User, _a1 error) *UserRegistrator_GetByLogin_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewUserRegistrator interface {

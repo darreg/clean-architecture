@@ -14,6 +14,14 @@ type UserPasswordChanger struct {
 	mock.Mock
 }
 
+type UserPasswordChanger_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserPasswordChanger) EXPECT() *UserPasswordChanger_Expecter {
+	return &UserPasswordChanger_Expecter{mock: &_m.Mock}
+}
+
 // ChangePassword provides a mock function with given fields: ctx, user
 func (_m *UserPasswordChanger) ChangePassword(ctx context.Context, user *entity.User) error {
 	ret := _m.Called(ctx, user)
@@ -26,6 +34,30 @@ func (_m *UserPasswordChanger) ChangePassword(ctx context.Context, user *entity.
 	}
 
 	return r0
+}
+
+// UserPasswordChanger_ChangePassword_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ChangePassword'
+type UserPasswordChanger_ChangePassword_Call struct {
+	*mock.Call
+}
+
+// ChangePassword is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *UserPasswordChanger_Expecter) ChangePassword(ctx interface{}, user interface{}) *UserPasswordChanger_ChangePassword_Call {
+	return &UserPasswordChanger_ChangePassword_Call{Call: _e.mock.On("ChangePassword", ctx, user)}
+}
+
+func (_c *UserPasswordChanger_ChangePassword_Call) Run(run func(ctx context.Context, user *entity.User)) *UserPasswordChanger_ChangePassword_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *UserPasswordChanger_ChangePassword_Call) Return(_a0 error) *UserPasswordChanger_ChangePassword_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserPasswordChanger interface {

@@ -14,6 +14,14 @@ type WithdrawAdder struct {
 	mock.Mock
 }
 
+type WithdrawAdder_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawAdder) EXPECT() *WithdrawAdder_Expecter {
+	return &WithdrawAdder_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, order
 func (_m *WithdrawAdder) Add(ctx context.Context, order *entity.Withdraw) error {
 	ret := _m.Called(ctx, order)
@@ -26,6 +34,30 @@ func (_m *WithdrawAdder) Add(ctx context.Context, order *entity.Withdraw) error 
 	}
 
 	return r0
+}
+
+// WithdrawAdder_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type WithdrawAdder_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - order *entity.Withdraw
+func (_e *WithdrawAdder_Expecter) Add(ctx interface{}, order interface{}) *WithdrawAdder_Add_Call {
+	return &WithdrawAdder_Add_Call{Call: _e.mock.On("Add", ctx, order)}
+}
+
+func (_c *WithdrawAdder_Add_Call) Run(run func(ctx context.Context, order *entity.Withdraw)) *WithdrawAdder_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.Withdraw))
+	})
+	return _c
+}
+
+func (_c *WithdrawAdder_Add_Call) Return(_a0 error) *WithdrawAdder_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawAdder interface {

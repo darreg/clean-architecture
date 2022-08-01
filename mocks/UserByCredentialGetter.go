@@ -14,6 +14,14 @@ type UserByCredentialGetter struct {
 	mock.Mock
 }
 
+type UserByCredentialGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserByCredentialGetter) EXPECT() *UserByCredentialGetter_Expecter {
+	return &UserByCredentialGetter_Expecter{mock: &_m.Mock}
+}
+
 // GetByCredential provides a mock function with given fields: ctx, login, passwordHash
 func (_m *UserByCredentialGetter) GetByCredential(ctx context.Context, login string, passwordHash string) (*entity.User, error) {
 	ret := _m.Called(ctx, login, passwordHash)
@@ -35,6 +43,31 @@ func (_m *UserByCredentialGetter) GetByCredential(ctx context.Context, login str
 	}
 
 	return r0, r1
+}
+
+// UserByCredentialGetter_GetByCredential_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetByCredential'
+type UserByCredentialGetter_GetByCredential_Call struct {
+	*mock.Call
+}
+
+// GetByCredential is a helper method to define mock.On call
+//  - ctx context.Context
+//  - login string
+//  - passwordHash string
+func (_e *UserByCredentialGetter_Expecter) GetByCredential(ctx interface{}, login interface{}, passwordHash interface{}) *UserByCredentialGetter_GetByCredential_Call {
+	return &UserByCredentialGetter_GetByCredential_Call{Call: _e.mock.On("GetByCredential", ctx, login, passwordHash)}
+}
+
+func (_c *UserByCredentialGetter_GetByCredential_Call) Run(run func(ctx context.Context, login string, passwordHash string)) *UserByCredentialGetter_GetByCredential_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *UserByCredentialGetter_GetByCredential_Call) Return(_a0 *entity.User, _a1 error) *UserByCredentialGetter_GetByCredential_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewUserByCredentialGetter interface {

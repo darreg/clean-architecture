@@ -14,6 +14,14 @@ type UserChanger struct {
 	mock.Mock
 }
 
+type UserChanger_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserChanger) EXPECT() *UserChanger_Expecter {
+	return &UserChanger_Expecter{mock: &_m.Mock}
+}
+
 // Change provides a mock function with given fields: ctx, user
 func (_m *UserChanger) Change(ctx context.Context, user *entity.User) error {
 	ret := _m.Called(ctx, user)
@@ -26,6 +34,30 @@ func (_m *UserChanger) Change(ctx context.Context, user *entity.User) error {
 	}
 
 	return r0
+}
+
+// UserChanger_Change_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Change'
+type UserChanger_Change_Call struct {
+	*mock.Call
+}
+
+// Change is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *UserChanger_Expecter) Change(ctx interface{}, user interface{}) *UserChanger_Change_Call {
+	return &UserChanger_Change_Call{Call: _e.mock.On("Change", ctx, user)}
+}
+
+func (_c *UserChanger_Change_Call) Run(run func(ctx context.Context, user *entity.User)) *UserChanger_Change_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *UserChanger_Change_Call) Return(_a0 error) *UserChanger_Change_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserChanger interface {

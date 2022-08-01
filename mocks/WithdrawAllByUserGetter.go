@@ -14,6 +14,14 @@ type WithdrawAllByUserGetter struct {
 	mock.Mock
 }
 
+type WithdrawAllByUserGetter_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawAllByUserGetter) EXPECT() *WithdrawAllByUserGetter_Expecter {
+	return &WithdrawAllByUserGetter_Expecter{mock: &_m.Mock}
+}
+
 // GetAllByUser provides a mock function with given fields: ctx, user
 func (_m *WithdrawAllByUserGetter) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error) {
 	ret := _m.Called(ctx, user)
@@ -35,6 +43,30 @@ func (_m *WithdrawAllByUserGetter) GetAllByUser(ctx context.Context, user *entit
 	}
 
 	return r0, r1
+}
+
+// WithdrawAllByUserGetter_GetAllByUser_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAllByUser'
+type WithdrawAllByUserGetter_GetAllByUser_Call struct {
+	*mock.Call
+}
+
+// GetAllByUser is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *WithdrawAllByUserGetter_Expecter) GetAllByUser(ctx interface{}, user interface{}) *WithdrawAllByUserGetter_GetAllByUser_Call {
+	return &WithdrawAllByUserGetter_GetAllByUser_Call{Call: _e.mock.On("GetAllByUser", ctx, user)}
+}
+
+func (_c *WithdrawAllByUserGetter_GetAllByUser_Call) Run(run func(ctx context.Context, user *entity.User)) *WithdrawAllByUserGetter_GetAllByUser_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *WithdrawAllByUserGetter_GetAllByUser_Call) Return(_a0 []*entity.Withdraw, _a1 error) *WithdrawAllByUserGetter_GetAllByUser_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawAllByUserGetter interface {

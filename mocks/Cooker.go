@@ -15,9 +15,43 @@ type Cooker struct {
 	mock.Mock
 }
 
+type Cooker_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *Cooker) EXPECT() *Cooker_Expecter {
+	return &Cooker_Expecter{mock: &_m.Mock}
+}
+
 // AddCookie provides a mock function with given fields: name, value, expireTime, w
 func (_m *Cooker) AddCookie(name string, value string, expireTime time.Time, w http.ResponseWriter) {
 	_m.Called(name, value, expireTime, w)
+}
+
+// Cooker_AddCookie_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddCookie'
+type Cooker_AddCookie_Call struct {
+	*mock.Call
+}
+
+// AddCookie is a helper method to define mock.On call
+//  - name string
+//  - value string
+//  - expireTime time.Time
+//  - w http.ResponseWriter
+func (_e *Cooker_Expecter) AddCookie(name interface{}, value interface{}, expireTime interface{}, w interface{}) *Cooker_AddCookie_Call {
+	return &Cooker_AddCookie_Call{Call: _e.mock.On("AddCookie", name, value, expireTime, w)}
+}
+
+func (_c *Cooker_AddCookie_Call) Run(run func(name string, value string, expireTime time.Time, w http.ResponseWriter)) *Cooker_AddCookie_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string), args[1].(string), args[2].(time.Time), args[3].(http.ResponseWriter))
+	})
+	return _c
+}
+
+func (_c *Cooker_AddCookie_Call) Return() *Cooker_AddCookie_Call {
+	_c.Call.Return()
+	return _c
 }
 
 // AddCookieWithDuration provides a mock function with given fields: name, value, duration, w
@@ -34,9 +68,59 @@ func (_m *Cooker) AddCookieWithDuration(name string, value string, duration stri
 	return r0
 }
 
+// Cooker_AddCookieWithDuration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddCookieWithDuration'
+type Cooker_AddCookieWithDuration_Call struct {
+	*mock.Call
+}
+
+// AddCookieWithDuration is a helper method to define mock.On call
+//  - name string
+//  - value string
+//  - duration string
+//  - w http.ResponseWriter
+func (_e *Cooker_Expecter) AddCookieWithDuration(name interface{}, value interface{}, duration interface{}, w interface{}) *Cooker_AddCookieWithDuration_Call {
+	return &Cooker_AddCookieWithDuration_Call{Call: _e.mock.On("AddCookieWithDuration", name, value, duration, w)}
+}
+
+func (_c *Cooker_AddCookieWithDuration_Call) Run(run func(name string, value string, duration string, w http.ResponseWriter)) *Cooker_AddCookieWithDuration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string), args[1].(string), args[2].(string), args[3].(http.ResponseWriter))
+	})
+	return _c
+}
+
+func (_c *Cooker_AddCookieWithDuration_Call) Return(_a0 error) *Cooker_AddCookieWithDuration_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // ClearCookie provides a mock function with given fields: name, w
 func (_m *Cooker) ClearCookie(name string, w http.ResponseWriter) {
 	_m.Called(name, w)
+}
+
+// Cooker_ClearCookie_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ClearCookie'
+type Cooker_ClearCookie_Call struct {
+	*mock.Call
+}
+
+// ClearCookie is a helper method to define mock.On call
+//  - name string
+//  - w http.ResponseWriter
+func (_e *Cooker_Expecter) ClearCookie(name interface{}, w interface{}) *Cooker_ClearCookie_Call {
+	return &Cooker_ClearCookie_Call{Call: _e.mock.On("ClearCookie", name, w)}
+}
+
+func (_c *Cooker_ClearCookie_Call) Run(run func(name string, w http.ResponseWriter)) *Cooker_ClearCookie_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string), args[1].(http.ResponseWriter))
+	})
+	return _c
+}
+
+func (_c *Cooker_ClearCookie_Call) Return() *Cooker_ClearCookie_Call {
+	_c.Call.Return()
+	return _c
 }
 
 type mockConstructorTestingTNewCooker interface {

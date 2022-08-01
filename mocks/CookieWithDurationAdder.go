@@ -13,6 +13,14 @@ type CookieWithDurationAdder struct {
 	mock.Mock
 }
 
+type CookieWithDurationAdder_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *CookieWithDurationAdder) EXPECT() *CookieWithDurationAdder_Expecter {
+	return &CookieWithDurationAdder_Expecter{mock: &_m.Mock}
+}
+
 // AddCookieWithDuration provides a mock function with given fields: name, value, duration, w
 func (_m *CookieWithDurationAdder) AddCookieWithDuration(name string, value string, duration string, w http.ResponseWriter) error {
 	ret := _m.Called(name, value, duration, w)
@@ -25,6 +33,32 @@ func (_m *CookieWithDurationAdder) AddCookieWithDuration(name string, value stri
 	}
 
 	return r0
+}
+
+// CookieWithDurationAdder_AddCookieWithDuration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'AddCookieWithDuration'
+type CookieWithDurationAdder_AddCookieWithDuration_Call struct {
+	*mock.Call
+}
+
+// AddCookieWithDuration is a helper method to define mock.On call
+//  - name string
+//  - value string
+//  - duration string
+//  - w http.ResponseWriter
+func (_e *CookieWithDurationAdder_Expecter) AddCookieWithDuration(name interface{}, value interface{}, duration interface{}, w interface{}) *CookieWithDurationAdder_AddCookieWithDuration_Call {
+	return &CookieWithDurationAdder_AddCookieWithDuration_Call{Call: _e.mock.On("AddCookieWithDuration", name, value, duration, w)}
+}
+
+func (_c *CookieWithDurationAdder_AddCookieWithDuration_Call) Run(run func(name string, value string, duration string, w http.ResponseWriter)) *CookieWithDurationAdder_AddCookieWithDuration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(string), args[1].(string), args[2].(string), args[3].(http.ResponseWriter))
+	})
+	return _c
+}
+
+func (_c *CookieWithDurationAdder_AddCookieWithDuration_Call) Return(_a0 error) *CookieWithDurationAdder_AddCookieWithDuration_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewCookieWithDurationAdder interface {

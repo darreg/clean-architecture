@@ -14,6 +14,14 @@ type UserTransactionalAccrualer struct {
 	mock.Mock
 }
 
+type UserTransactionalAccrualer_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserTransactionalAccrualer) EXPECT() *UserTransactionalAccrualer_Expecter {
+	return &UserTransactionalAccrualer_Expecter{mock: &_m.Mock}
+}
+
 // Accrual provides a mock function with given fields: ctx, user, accrual
 func (_m *UserTransactionalAccrualer) Accrual(ctx context.Context, user *entity.User, accrual float32) error {
 	ret := _m.Called(ctx, user, accrual)
@@ -28,6 +36,31 @@ func (_m *UserTransactionalAccrualer) Accrual(ctx context.Context, user *entity.
 	return r0
 }
 
+// UserTransactionalAccrualer_Accrual_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Accrual'
+type UserTransactionalAccrualer_Accrual_Call struct {
+	*mock.Call
+}
+
+// Accrual is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+//  - accrual float32
+func (_e *UserTransactionalAccrualer_Expecter) Accrual(ctx interface{}, user interface{}, accrual interface{}) *UserTransactionalAccrualer_Accrual_Call {
+	return &UserTransactionalAccrualer_Accrual_Call{Call: _e.mock.On("Accrual", ctx, user, accrual)}
+}
+
+func (_c *UserTransactionalAccrualer_Accrual_Call) Run(run func(ctx context.Context, user *entity.User, accrual float32)) *UserTransactionalAccrualer_Accrual_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User), args[2].(float32))
+	})
+	return _c
+}
+
+func (_c *UserTransactionalAccrualer_Accrual_Call) Return(_a0 error) *UserTransactionalAccrualer_Accrual_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
 // WithinTransaction provides a mock function with given fields: ctx, tFunc
 func (_m *UserTransactionalAccrualer) WithinTransaction(ctx context.Context, tFunc func(context.Context) error) error {
 	ret := _m.Called(ctx, tFunc)
@@ -40,6 +73,30 @@ func (_m *UserTransactionalAccrualer) WithinTransaction(ctx context.Context, tFu
 	}
 
 	return r0
+}
+
+// UserTransactionalAccrualer_WithinTransaction_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'WithinTransaction'
+type UserTransactionalAccrualer_WithinTransaction_Call struct {
+	*mock.Call
+}
+
+// WithinTransaction is a helper method to define mock.On call
+//  - ctx context.Context
+//  - tFunc func(context.Context) error
+func (_e *UserTransactionalAccrualer_Expecter) WithinTransaction(ctx interface{}, tFunc interface{}) *UserTransactionalAccrualer_WithinTransaction_Call {
+	return &UserTransactionalAccrualer_WithinTransaction_Call{Call: _e.mock.On("WithinTransaction", ctx, tFunc)}
+}
+
+func (_c *UserTransactionalAccrualer_WithinTransaction_Call) Run(run func(ctx context.Context, tFunc func(context.Context) error)) *UserTransactionalAccrualer_WithinTransaction_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(func(context.Context) error))
+	})
+	return _c
+}
+
+func (_c *UserTransactionalAccrualer_WithinTransaction_Call) Return(_a0 error) *UserTransactionalAccrualer_WithinTransaction_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserTransactionalAccrualer interface {

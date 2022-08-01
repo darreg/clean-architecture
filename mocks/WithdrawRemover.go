@@ -15,6 +15,14 @@ type WithdrawRemover struct {
 	mock.Mock
 }
 
+type WithdrawRemover_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *WithdrawRemover) EXPECT() *WithdrawRemover_Expecter {
+	return &WithdrawRemover_Expecter{mock: &_m.Mock}
+}
+
 // Remove provides a mock function with given fields: ctx, withdrawID
 func (_m *WithdrawRemover) Remove(ctx context.Context, withdrawID uuid.UUID) error {
 	ret := _m.Called(ctx, withdrawID)
@@ -27,6 +35,30 @@ func (_m *WithdrawRemover) Remove(ctx context.Context, withdrawID uuid.UUID) err
 	}
 
 	return r0
+}
+
+// WithdrawRemover_Remove_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Remove'
+type WithdrawRemover_Remove_Call struct {
+	*mock.Call
+}
+
+// Remove is a helper method to define mock.On call
+//  - ctx context.Context
+//  - withdrawID uuid.UUID
+func (_e *WithdrawRemover_Expecter) Remove(ctx interface{}, withdrawID interface{}) *WithdrawRemover_Remove_Call {
+	return &WithdrawRemover_Remove_Call{Call: _e.mock.On("Remove", ctx, withdrawID)}
+}
+
+func (_c *WithdrawRemover_Remove_Call) Run(run func(ctx context.Context, withdrawID uuid.UUID)) *WithdrawRemover_Remove_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *WithdrawRemover_Remove_Call) Return(_a0 error) *WithdrawRemover_Remove_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewWithdrawRemover interface {

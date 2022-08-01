@@ -14,6 +14,14 @@ type UserWithdrawer struct {
 	mock.Mock
 }
 
+type UserWithdrawer_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserWithdrawer) EXPECT() *UserWithdrawer_Expecter {
+	return &UserWithdrawer_Expecter{mock: &_m.Mock}
+}
+
 // Withdraw provides a mock function with given fields: ctx, user, sum
 func (_m *UserWithdrawer) Withdraw(ctx context.Context, user *entity.User, sum float32) error {
 	ret := _m.Called(ctx, user, sum)
@@ -26,6 +34,31 @@ func (_m *UserWithdrawer) Withdraw(ctx context.Context, user *entity.User, sum f
 	}
 
 	return r0
+}
+
+// UserWithdrawer_Withdraw_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Withdraw'
+type UserWithdrawer_Withdraw_Call struct {
+	*mock.Call
+}
+
+// Withdraw is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+//  - sum float32
+func (_e *UserWithdrawer_Expecter) Withdraw(ctx interface{}, user interface{}, sum interface{}) *UserWithdrawer_Withdraw_Call {
+	return &UserWithdrawer_Withdraw_Call{Call: _e.mock.On("Withdraw", ctx, user, sum)}
+}
+
+func (_c *UserWithdrawer_Withdraw_Call) Run(run func(ctx context.Context, user *entity.User, sum float32)) *UserWithdrawer_Withdraw_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User), args[2].(float32))
+	})
+	return _c
+}
+
+func (_c *UserWithdrawer_Withdraw_Call) Return(_a0 error) *UserWithdrawer_Withdraw_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserWithdrawer interface {

@@ -14,6 +14,14 @@ type UserAdder struct {
 	mock.Mock
 }
 
+type UserAdder_Expecter struct {
+	mock *mock.Mock
+}
+
+func (_m *UserAdder) EXPECT() *UserAdder_Expecter {
+	return &UserAdder_Expecter{mock: &_m.Mock}
+}
+
 // Add provides a mock function with given fields: ctx, user
 func (_m *UserAdder) Add(ctx context.Context, user *entity.User) error {
 	ret := _m.Called(ctx, user)
@@ -26,6 +34,30 @@ func (_m *UserAdder) Add(ctx context.Context, user *entity.User) error {
 	}
 
 	return r0
+}
+
+// UserAdder_Add_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Add'
+type UserAdder_Add_Call struct {
+	*mock.Call
+}
+
+// Add is a helper method to define mock.On call
+//  - ctx context.Context
+//  - user *entity.User
+func (_e *UserAdder_Expecter) Add(ctx interface{}, user interface{}) *UserAdder_Add_Call {
+	return &UserAdder_Add_Call{Call: _e.mock.On("Add", ctx, user)}
+}
+
+func (_c *UserAdder_Add_Call) Run(run func(ctx context.Context, user *entity.User)) *UserAdder_Add_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(*entity.User))
+	})
+	return _c
+}
+
+func (_c *UserAdder_Add_Call) Return(_a0 error) *UserAdder_Add_Call {
+	_c.Call.Return(_a0)
+	return _c
 }
 
 type mockConstructorTestingTNewUserAdder interface {
