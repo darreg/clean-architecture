@@ -36,15 +36,11 @@ func Accrual(
 			logger.Error(fmt.Errorf("accrual canceled by context"))
 			return
 		default:
-			logger.Info("Accrual request", "number", number)
-
-			accrualResult, err := AccrualRequest(ctx, number, accrualSystemAddress, accrualSystemMethod)
+			accrualResult, err := AccrualRequest(ctx, number, accrualSystemAddress, accrualSystemMethod, logger)
 			if err != nil {
 				logger.Error(err)
 				return
 			}
-
-			logger.Info("Accrual response", "number", accrualResult.OrderNumber, "status", accrualResult.Status.String())
 
 			err = AccrualProcess(ctx, accrualResult, user, userRepository, orderRepository, transactor)
 			if err != nil {

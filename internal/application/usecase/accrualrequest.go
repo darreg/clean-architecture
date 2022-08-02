@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/alrund/yp-1-project/internal/domain/port"
 	"net/http"
 	"time"
 
@@ -46,11 +47,14 @@ func (a *AccrualResult) UnmarshalJSON(data []byte) error {
 func AccrualRequest(
 	ctx context.Context,
 	number, accrualSystemAddress, accrualSystemMethod string,
+	logger port.Logger,
 ) (*AccrualResult, error) {
 	var result AccrualResult
 
 	ctx, cancel := context.WithTimeout(ctx, RequestMaxWaitTime)
 	defer cancel()
+
+	logger.Info("Accrual request", "number", number)
 
 	req, err := http.NewRequestWithContext(
 		ctx,
@@ -76,6 +80,8 @@ func AccrualRequest(
 	if err != nil {
 		return nil, err
 	}
+
+	logger.Info("Accrual response", "number", result.OrderNumber, "status", result.Status.String())
 
 	return &result, nil
 }
