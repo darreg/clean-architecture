@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/alrund/yp-1-project/internal/domain/port"
 	"net/http"
 	"time"
 
 	"github.com/alrund/yp-1-project/internal/domain/entity"
+	"github.com/alrund/yp-1-project/internal/domain/port"
 )
 
 const (
