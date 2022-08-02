@@ -56,6 +56,12 @@ type Cooker interface {
 	CookieWithDurationAdder
 }
 
+type Storage interface {
+	Connect() *sql.DB
+	Initialization(migrationDir string) error
+	Ping(ctx context.Context) error
+}
+
 type TransactSupporter interface {
 	WithinTransaction(ctx context.Context, tFunc func(ctx context.Context) error) error
 }

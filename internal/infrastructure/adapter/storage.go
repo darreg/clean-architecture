@@ -1,4 +1,4 @@
-package service
+package adapter
 
 import (
 	"context"
@@ -11,10 +11,8 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib" // pgx
 )
 
-const migrationDir string = "migrations"
-
 type Storage struct {
-	Connect *sql.DB
+	connect *sql.DB
 }
 
 func NewStorage(dsn string) (*Storage, error) {
@@ -30,18 +28,13 @@ func NewStorage(dsn string) (*Storage, error) {
 		return nil, err
 	}
 
-	storage := &Storage{Connect: db}
-
-	err = storage.migrate()
-	if err != nil {
-		return nil, err
-	}
+	storage := &Storage{connect: db}
 
 	return storage, nil
 }
 
-func (s *Storage) migrate() error {
-	driver, err := postgres.WithInstance(s.Connect, &postgres.Config{})
+func (s *Storage) Initialization(migrationDir string) error {
+	driver, err := postgres.WithInstance(s.connect, &postgres.Config{})
 	if err != nil {
 		return err
 	}
@@ -57,4 +50,15 @@ func (s *Storage) migrate() error {
 	}
 
 	return nil
+}
+
+func (s *Storage) Connect() *sql.DB {
+	return s.connect
+}
+
+func (s *Storage) Ping(ctx context.Context) error {
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+
+	return s.connect.PingContext(ctx)
 }
