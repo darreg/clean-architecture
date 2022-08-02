@@ -88,7 +88,7 @@ func TestAddOrder(t *testing.T) {
 				orderAdder.EXPECT().
 					Get(a.ctx, mock.AnythingOfType("string")).
 					Return(&entity.Order{
-						Number:      entity.OrderNumber("5251743000"),
+						Number:      "5251743000",
 						UserID:      userUUID,
 						Status:      entity.New,
 						Accrual:     111.1,
@@ -124,7 +124,7 @@ func TestAddOrder(t *testing.T) {
 				orderAdder.EXPECT().
 					Get(a.ctx, mock.AnythingOfType("string")).
 					Return(&entity.Order{
-						Number:      entity.OrderNumber("5251743000"),
+						Number:      "5251743000",
 						UserID:      uuid.New(),
 						Status:      entity.New,
 						Accrual:     111.1,
