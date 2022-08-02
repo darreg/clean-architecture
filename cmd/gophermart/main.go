@@ -2,19 +2,22 @@ package main
 
 import (
 	"github.com/alrund/yp-1-project/internal/application/app"
-	"github.com/alrund/yp-1-project/internal/domain/port"
 	"github.com/alrund/yp-1-project/internal/infrastructure/adapter"
+	"github.com/alrund/yp-1-project/internal/infrastructure/builder"
 	"github.com/alrund/yp-1-project/internal/infrastructure/handler"
 	"github.com/alrund/yp-1-project/internal/infrastructure/middleware"
-	"github.com/alrund/yp-1-project/internal/infrastructure/repository"
-	"github.com/alrund/yp-1-project/internal/infrastructure/service"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
 	logger := adapter.NewLogger()
 
-	a, err := builder(logger)
+	config, err := app.NewConfig(adapter.NewConfigLoader())
+	if err != nil {
+		logger.Fatal(err)
+	}
+
+	a, err := builder.Builder(config, logger)
 	if err != nil {
 		logger.Fatal(err)
 	}
@@ -40,47 +43,4 @@ func routes(a *app.App) {
 
 	r.Use(middleware.RequestLog(a))
 	r.Use(middleware.Auth(a))
-}
-
-func builder(logger port.Logger) (*app.App, error) {
-	config, err := app.NewConfig(adapter.NewConfigLoader())
-	if err != nil {
-		return nil, err
-	}
-
-	if config.Debug {
-		err = logger.EnableDebug()
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	storage, err := service.NewStorage(config.DatabaseURI)
-	if err != nil {
-		return nil, err
-	}
-
-	var (
-		router             = adapter.NewRouter()
-		cooker             = adapter.NewCooker()
-		hasher             = adapter.NewHasher()
-		encryptor          = adapter.NewEncryptor(config.CipherPass)
-		transactor         = adapter.NewTransactor(storage.Connect)
-		userRepository     = repository.NewUserRepository(transactor, storage.Connect)
-		orderRepository    = repository.NewOrderRepository(transactor, storage.Connect)
-		withdrawRepository = repository.NewWithdrawRepository(transactor, storage.Connect)
-	)
-
-	return app.NewApp(
-		config,
-		logger,
-		router,
-		encryptor,
-		hasher,
-		cooker,
-		transactor,
-		userRepository,
-		orderRepository,
-		withdrawRepository,
-	), nil
 }

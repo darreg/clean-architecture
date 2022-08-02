@@ -13,6 +13,7 @@ type Config struct {
 	CipherPass            string `env:"CIPHER_PASSWORD" env-default:"J53RPX6"`
 	SessionCookieDuration string `env:"COOKIE_DURATION" env-default:"24h"`
 	SessionCookieName     string `env:"COOKIE_NAME" env-default:"sessionID"`
+	MigrationDir          string `env-default:"migrations"`
 }
 
 func NewConfig(loader port.ConfigLoader) (*Config, error) {
