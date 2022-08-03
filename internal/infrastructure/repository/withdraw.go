@@ -89,6 +89,10 @@ func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User)
 		return nil, err
 	}
 
+	if len(withdraws) == 0 {
+		return nil, usecase.ErrWithdrawNotFound
+	}
+
 	return withdraws, nil
 }
 

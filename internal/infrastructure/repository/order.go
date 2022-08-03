@@ -81,6 +81,10 @@ func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([
 		return nil, err
 	}
 
+	if len(orders) == 0 {
+		return nil, usecase.ErrOrderNotFound
+	}
+
 	return orders, nil
 }
 
