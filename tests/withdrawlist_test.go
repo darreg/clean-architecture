@@ -4,38 +4,41 @@ package tests
 
 import (
 	"fmt"
+	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/infrastructure/handler"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
-	"time"
-
-	"github.com/alrund/yp-1-project/internal/application/app"
-	"github.com/stretchr/testify/assert"
 )
 
-func SetupTestBalance(a *app.App) {
+func SetupTestWithdrawList(a *app.App) {
 	db := a.Storage.Connect()
 	db.Exec("INSERT INTO users(id, login, password) VALUES ($1, $2, $3)",
+		"9a110553-f962-4ab4-ba92-7c3fb7a107f3", "login", "password")
+	db.Exec("INSERT INTO users(id, login, password) VALUES ($1, $2, $3)",
 		"dbac0532-eaa4-44f8-8845-72be1b25a6ac", "login", "password")
-	db.Exec("INSERT INTO users(id, login, password, current) VALUES ($1, $2, $3, $4)",
-		"9a110553-f962-4ab4-ba92-7c3fb7a107f3", "login", "password", 555.5)
-	db.Exec("INSERT INTO withdraws(id, order_number, user_id, sum, processed_at) VALUES ($1, $2, $3, $4, $5)",
-		uuid.NewString(), "444444", "9a110553-f962-4ab4-ba92-7c3fb7a107f3", 666.6, time.Now())
-
+	db.Exec(
+		"INSERT INTO withdraws(id, order_number, user_id, sum, processed_at)"+
+			" VALUES ($1, $2, $3, $4, $5)",
+		uuid.NewString(), "333333", "dbac0532-eaa4-44f8-8845-72be1b25a6ac", 100.1, "2022-08-03T16:50:48Z")
+	db.Exec(
+		"INSERT INTO withdraws(id, order_number, user_id, sum, processed_at)"+
+			" VALUES ($1, $2, $3, $4, $5)",
+		uuid.NewString(), "444444", "dbac0532-eaa4-44f8-8845-72be1b25a6ac", 200.2, "2022-08-03T16:55:48Z")
 }
 
-func TearDownTestBalance(a *app.App) {
+func TearDownTestWithdrawList(a *app.App) {
 	db := a.Storage.Connect()
 	db.Exec("DELETE FROM users")
 	db.Exec("DELETE FROM withdraws")
 }
 
-func (s *IntegrationTestSuite) TestBalance() {
-	SetupTestBalance(s.app)
+func (s *IntegrationTestSuite) TestWithdrawList() {
+	SetupTestWithdrawList(s.app)
 	defer func() {
-		TearDownTestBalance(s.app)
+		TearDownTestWithdrawList(s.app)
 	}()
 
 	tests := []struct {
@@ -47,31 +50,26 @@ func (s *IntegrationTestSuite) TestBalance() {
 			name: "success",
 			request: request{
 				method:             http.MethodGet,
-				target:             "/api/user/balance",
+				target:             "/api/user/withdrawals",
 				sessionCookieName:  s.app.Config.SessionCookieName,
 				sessionCookieValue: "dbac0532-eaa4-44f8-8845-72be1b25a6ac",
 				body:               "",
 				contentType:        "application/json",
 			},
 			want: want{
-				code:        http.StatusOK,
-				response:    `{"current":0, "withdrawn":0}`,
-				contentType: "application/json",
-			},
-		},
-		{
-			name: "success with balance",
-			request: request{
-				method:             http.MethodGet,
-				target:             "/api/user/balance",
-				sessionCookieName:  s.app.Config.SessionCookieName,
-				sessionCookieValue: "9a110553-f962-4ab4-ba92-7c3fb7a107f3",
-				body:               "",
-				contentType:        "application/json",
-			},
-			want: want{
-				code:        http.StatusOK,
-				response:    `{"current":555.5, "withdrawn":666.6}`,
+				code: http.StatusOK,
+				response: `[
+    {
+        "order": "333333",
+        "sum": 100.1,
+        "processed_at": "2022-08-03T16:50:48Z"
+    },
+    {
+        "order": "444444",
+        "sum": 200.2,
+        "processed_at": "2022-08-03T16:55:48Z"
+    }
+]`,
 				contentType: "application/json",
 			},
 		},
@@ -79,7 +77,7 @@ func (s *IntegrationTestSuite) TestBalance() {
 			name: "fail with not authenticated",
 			request: request{
 				method:             http.MethodGet,
-				target:             "/api/user/balance",
+				target:             "/api/user/withdrawals",
 				sessionCookieName:  s.app.Config.SessionCookieName,
 				sessionCookieValue: "",
 				body:               "",
@@ -91,11 +89,27 @@ func (s *IntegrationTestSuite) TestBalance() {
 				contentType: "application/json",
 			},
 		},
+		{
+			name: "fail with withdraw not found",
+			request: request{
+				method:             http.MethodGet,
+				target:             "/api/user/withdrawals",
+				sessionCookieName:  s.app.Config.SessionCookieName,
+				sessionCookieValue: "9a110553-f962-4ab4-ba92-7c3fb7a107f3",
+				body:               "",
+				contentType:        "application/json",
+			},
+			want: want{
+				code:        http.StatusNoContent,
+				response:    fmt.Sprintf(`{"warning":"%s"}`, usecase.ErrWithdrawNotFound),
+				contentType: "application/json",
+			},
+		},
 	}
 	t := s.T()
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
-			h := handler.BalanceHandler(s.app)
+			h := handler.WithdrawListHandler(s.app)
 
 			w := s.MakeTestRequest(tt.request, h)
 			res := w.Result()

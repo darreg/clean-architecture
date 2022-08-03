@@ -4,38 +4,40 @@ package tests
 
 import (
 	"fmt"
+	"github.com/alrund/yp-1-project/internal/application/app"
 	"github.com/alrund/yp-1-project/internal/application/usecase"
 	"github.com/alrund/yp-1-project/internal/infrastructure/handler"
-	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
-	"time"
-
-	"github.com/alrund/yp-1-project/internal/application/app"
-	"github.com/stretchr/testify/assert"
 )
 
-func SetupTestBalance(a *app.App) {
+func SetupTestOrderList(a *app.App) {
 	db := a.Storage.Connect()
 	db.Exec("INSERT INTO users(id, login, password) VALUES ($1, $2, $3)",
+		"9a110553-f962-4ab4-ba92-7c3fb7a107f3", "login", "password")
+	db.Exec("INSERT INTO users(id, login, password) VALUES ($1, $2, $3)",
 		"dbac0532-eaa4-44f8-8845-72be1b25a6ac", "login", "password")
-	db.Exec("INSERT INTO users(id, login, password, current) VALUES ($1, $2, $3, $4)",
-		"9a110553-f962-4ab4-ba92-7c3fb7a107f3", "login", "password", 555.5)
-	db.Exec("INSERT INTO withdraws(id, order_number, user_id, sum, processed_at) VALUES ($1, $2, $3, $4, $5)",
-		uuid.NewString(), "444444", "9a110553-f962-4ab4-ba92-7c3fb7a107f3", 666.6, time.Now())
-
+	db.Exec(
+		"INSERT INTO orders(number, user_id, status, accrual, uploaded_at, processed_at)"+
+			" VALUES ($1, $2, $3, $4, $5, $6)",
+		"333333", "dbac0532-eaa4-44f8-8845-72be1b25a6ac", 3, 100.1, "2022-08-03T16:50:48Z", "2022-08-03T16:50:48Z")
+	db.Exec(
+		"INSERT INTO orders(number, user_id, status, accrual, uploaded_at, processed_at)"+
+			" VALUES ($1, $2, $3, $4, $5, $6)",
+		"444444", "dbac0532-eaa4-44f8-8845-72be1b25a6ac", 3, 200.2, "2022-08-03T17:50:48Z", "2022-08-03T17:50:48Z")
 }
 
-func TearDownTestBalance(a *app.App) {
+func TearDownTestOrderList(a *app.App) {
 	db := a.Storage.Connect()
 	db.Exec("DELETE FROM users")
-	db.Exec("DELETE FROM withdraws")
+	db.Exec("DELETE FROM orders")
 }
 
-func (s *IntegrationTestSuite) TestBalance() {
-	SetupTestBalance(s.app)
+func (s *IntegrationTestSuite) TestOrderList() {
+	SetupTestOrderList(s.app)
 	defer func() {
-		TearDownTestBalance(s.app)
+		TearDownTestOrderList(s.app)
 	}()
 
 	tests := []struct {
@@ -47,31 +49,30 @@ func (s *IntegrationTestSuite) TestBalance() {
 			name: "success",
 			request: request{
 				method:             http.MethodGet,
-				target:             "/api/user/balance",
+				target:             "/api/user/orders",
 				sessionCookieName:  s.app.Config.SessionCookieName,
 				sessionCookieValue: "dbac0532-eaa4-44f8-8845-72be1b25a6ac",
 				body:               "",
 				contentType:        "application/json",
 			},
 			want: want{
-				code:        http.StatusOK,
-				response:    `{"current":0, "withdrawn":0}`,
-				contentType: "application/json",
-			},
-		},
-		{
-			name: "success with balance",
-			request: request{
-				method:             http.MethodGet,
-				target:             "/api/user/balance",
-				sessionCookieName:  s.app.Config.SessionCookieName,
-				sessionCookieValue: "9a110553-f962-4ab4-ba92-7c3fb7a107f3",
-				body:               "",
-				contentType:        "application/json",
-			},
-			want: want{
-				code:        http.StatusOK,
-				response:    `{"current":555.5, "withdrawn":666.6}`,
+				code: http.StatusOK,
+				response: `[
+		   {
+		       "accrual": 100.1,
+		       "number": "333333",
+		       "uploaded_at": "2022-08-03T16:50:48Z",
+		       "processed_at": "2022-08-03T16:50:48Z",
+		       "status": "PROCESSED"
+		   },
+		   {
+		       "accrual": 200.2,
+		       "number": "444444",
+		       "uploaded_at": "2022-08-03T17:50:48Z",
+		       "processed_at": "2022-08-03T17:50:48Z",
+		       "status": "PROCESSED"
+		   }
+		]`,
 				contentType: "application/json",
 			},
 		},
@@ -79,7 +80,7 @@ func (s *IntegrationTestSuite) TestBalance() {
 			name: "fail with not authenticated",
 			request: request{
 				method:             http.MethodGet,
-				target:             "/api/user/balance",
+				target:             "/api/user/orders",
 				sessionCookieName:  s.app.Config.SessionCookieName,
 				sessionCookieValue: "",
 				body:               "",
@@ -91,11 +92,27 @@ func (s *IntegrationTestSuite) TestBalance() {
 				contentType: "application/json",
 			},
 		},
+		{
+			name: "fail with order not found",
+			request: request{
+				method:             http.MethodGet,
+				target:             "/api/user/orders",
+				sessionCookieName:  s.app.Config.SessionCookieName,
+				sessionCookieValue: "9a110553-f962-4ab4-ba92-7c3fb7a107f3",
+				body:               "",
+				contentType:        "application/json",
+			},
+			want: want{
+				code:        http.StatusNoContent,
+				response:    fmt.Sprintf(`{"warning":"%s"}`, usecase.ErrOrderNotFound),
+				contentType: "application/json",
+			},
+		},
 	}
 	t := s.T()
 	for _, tt := range tests {
 		s.Run(tt.name, func() {
-			h := handler.BalanceHandler(s.app)
+			h := handler.OrderListHandler(s.app)
 
 			w := s.MakeTestRequest(tt.request, h)
 			res := w.Result()
