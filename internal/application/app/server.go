@@ -27,13 +27,13 @@ func (a *App) AuthRequired(r *http.Request) (string, error) {
 func (a *App) Warn(w http.ResponseWriter, r *http.Request, code int, err error) {
 	a.Logger.Warn(err.Error())
 
-	a.JSONRespond(w, r, code, err.Error())
+	a.JSONRespond(w, r, code, map[string]string{"warning": err.Error()})
 }
 
 func (a *App) Error(w http.ResponseWriter, r *http.Request, code int, err error) {
 	a.Logger.Error(err)
 
-	a.JSONRespond(w, r, code, err.Error())
+	a.JSONRespond(w, r, code, map[string]string{"error": err.Error()})
 }
 
 func (a *App) PlainRespond(w http.ResponseWriter, r *http.Request, code int, data []byte) {
