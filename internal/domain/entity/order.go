@@ -17,26 +17,24 @@ type Order struct {
 }
 
 func (o Order) MarshalJSON() ([]byte, error) {
-	type Alias Order
-
 	var ProcessedAt string
 	if o.ProcessedAt != nil {
 		ProcessedAt = o.ProcessedAt.Format(time.RFC3339)
 	}
 
-	aliasValue := &struct {
-		Alias
-		Number      string `json:"number"`
-		UploadedAt  string `json:"uploaded_at"`
-		ProcessedAt string `json:"processed_at,omitempty"`
-		OrderStatus string `json:"status"`
-	}{
-		Alias:       Alias(o),
-		Number:      o.Number.String(),
-		UploadedAt:  o.UploadedAt.Format(time.RFC3339),
-		ProcessedAt: ProcessedAt,
-		OrderStatus: o.Status.String(),
+	type OrderView struct {
+		Number      OrderNumber `json:"number"`
+		Status      string      `json:"status"`
+		Accrual     float32     `json:"accrual,omitempty"`
+		UploadedAt  string      `json:"uploaded_at"`
+		ProcessedAt string      `json:"processed_at,omitempty"`
 	}
 
-	return json.Marshal(aliasValue)
+	return json.Marshal(&OrderView{
+		Number:      o.Number,
+		Status:      o.Status.String(),
+		Accrual:     o.Accrual,
+		UploadedAt:  o.UploadedAt.Format(time.RFC3339),
+		ProcessedAt: ProcessedAt,
+	})
 }
