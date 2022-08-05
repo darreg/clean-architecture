@@ -12,7 +12,7 @@ import (
 
 func Accrual(
 	ctx context.Context,
-	number, userID, accrualSystemAddress, accrualSystemMethod string,
+	number, userID, accrualSystemAddress, accrualSystemMethod, accrualSystemPollInterval string,
 	userRepository port.UserRepository,
 	orderRepository port.OrderRepository,
 	transactor port.Transactor,
@@ -25,6 +25,12 @@ func Accrual(
 	}
 
 	user, err := userRepository.Get(ctx, userUUID)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	pollInterval, err := time.ParseDuration(accrualSystemPollInterval)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -52,7 +58,7 @@ func Accrual(
 				return
 			}
 
-			time.Sleep(time.Second)
+			time.Sleep(pollInterval)
 		}
 	}
 }
