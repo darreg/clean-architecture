@@ -7,7 +7,7 @@ import (
 type Config struct {
 	Debug                     bool   `env-default:"false"`
 	RunAddress                string `env:"RUN_ADDRESS" env-default:"localhost:3000"`
-	DatabaseURI               string `env:"DATABASE_URI" env-default:"postgres://dev:dev@localhost:5432/dev?sslmode=disable"`
+	DatabaseURI               string `env:"DATABASE_URI" env-default:"postgres://dev:dev@localhost:5432/dev?sslmode=disable"` //nolint
 	AccrualSystemAddress      string `env:"ACCRUAL_SYSTEM_ADDRESS" env-default:"http://localhost:8080"`
 	AccrualSystemMethod       string `env:"ACCRUAL_SYSTEM_METHOD" env-default:"/api/orders/%s"`
 	AccrualSystemPollInterval string `env:"ACCRUAL_SYSTEM_POLL_INTERVAL" env-default:"1s"`
