@@ -3,19 +3,19 @@ package app
 import "flag"
 
 type Flags struct {
-	Debug bool
-	A     string
-	D     string
-	R     string
+	Debug                bool
+	RunAddress           string
+	DatabaseURI          string
+	AccrualSystemAddress string
 }
 
 func NewFlags() *Flags {
 	flags := &Flags{}
 
 	flag.BoolVar(&flags.Debug, "debug", false, "Enable debug")
-	flag.StringVar(&flags.A, "a", "", "Run address")
-	flag.StringVar(&flags.D, "d", "", "Database uri")
-	flag.StringVar(&flags.R, "r", "", "Accrual system address")
+	flag.StringVar(&flags.RunAddress, "a", "", "Run address")
+	flag.StringVar(&flags.DatabaseURI, "d", "", "Database uri")
+	flag.StringVar(&flags.AccrualSystemAddress, "r", "", "Accrual system address")
 
 	flag.Parse()
 

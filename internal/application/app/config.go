@@ -21,9 +21,9 @@ func NewConfig(loader port.ConfigLoader) (*Config, error) {
 
 	flags := NewFlags()
 	cfg.Debug = flags.Debug
-	cfg.RunAddress = flags.A
-	cfg.DatabaseURI = flags.D
-	cfg.AccrualSystemAddress = flags.R
+	cfg.RunAddress = flags.RunAddress
+	cfg.DatabaseURI = flags.DatabaseURI
+	cfg.AccrualSystemAddress = flags.AccrualSystemAddress
 
 	if err := loader.Load(cfg); err != nil {
 		return nil, err
