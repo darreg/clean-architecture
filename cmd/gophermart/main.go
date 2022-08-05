@@ -22,14 +22,14 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	routes(a)
+	initRoutes(a)
 
 	if err := a.Run(); err != nil {
 		logger.Fatal(err)
 	}
 }
 
-func routes(a *app.App) {
+func initRoutes(a *app.App) {
 	r := a.Router.WithPrefix("/api/user")
 	r.Post("/register", handler.RegisterHandler(a))
 	r.Post("/login", handler.LoginHandler(a))
