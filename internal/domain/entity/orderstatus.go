@@ -14,11 +14,18 @@ var ErrInvalidOrderStatus = errors.New("invalid order status")
 type OrderStatus int
 
 func (s OrderStatus) String() string {
-	statuses := [...]string{"NEW", "PROCESSING", "INVALID", "PROCESSED"}
-	if len(statuses) < int(s) {
+	switch s {
+	case New:
+		return "NEW"
+	case Processing:
+		return "PROCESSING"
+	case Invalid:
+		return "INVALID"
+	case Processed:
+		return "PROCESSED"
+	default:
 		return ""
 	}
-	return statuses[s]
 }
 
 func ToOrderStatus(str string) (OrderStatus, error) {
