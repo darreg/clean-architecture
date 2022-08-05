@@ -28,7 +28,7 @@ func TestOrderList(t *testing.T) {
 	userUUID := uuid.New()
 	uploadedAt := time.Now()
 	processedAt := time.Now()
-	ordersMock := []*entity.Order{
+	ordersMock := []entity.Order{
 		{
 			Number:      entity.OrderNumber("12345678903"),
 			UserID:      userUUID,
@@ -50,7 +50,7 @@ func TestOrderList(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        *args
-		want        []*entity.Order
+		want        []entity.Order
 		wantErr     error
 		mockPrepare func(a *args) *m
 	}{

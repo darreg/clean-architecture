@@ -13,7 +13,7 @@ func OrderList(
 	userID string,
 	orderRepository port.OrderAllByUserGetter,
 	userRepository port.UserGetter,
-) ([]*entity.Order, error) {
+) ([]entity.Order, error) {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
 		return nil, err

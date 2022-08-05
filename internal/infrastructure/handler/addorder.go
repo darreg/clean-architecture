@@ -65,7 +65,8 @@ func AddOrderHandler(a *app.App) http.Handler {
 		go func(wg *sync.WaitGroup) {
 			usecase.Accrual(
 				r.Context(),
-				number, userID, a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod,
+				number, userID,
+				a.Config.AccrualSystemAddress, a.Config.AccrualSystemMethod, a.Config.AccrualSystemPollInterval,
 				a.UserRepository,
 				a.OrderRepository,
 				a.Transactor,

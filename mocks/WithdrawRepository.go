@@ -148,15 +148,15 @@ func (_c *WithdrawRepository_Get_Call) Return(_a0 *entity.Withdraw, _a1 error) *
 }
 
 // GetAllByUser provides a mock function with given fields: ctx, user
-func (_m *WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error) {
+func (_m *WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Withdraw, error) {
 	ret := _m.Called(ctx, user)
 
-	var r0 []*entity.Withdraw
-	if rf, ok := ret.Get(0).(func(context.Context, *entity.User) []*entity.Withdraw); ok {
+	var r0 []entity.Withdraw
+	if rf, ok := ret.Get(0).(func(context.Context, *entity.User) []entity.Withdraw); ok {
 		r0 = rf(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*entity.Withdraw)
+			r0 = ret.Get(0).([]entity.Withdraw)
 		}
 	}
 
@@ -189,7 +189,7 @@ func (_c *WithdrawRepository_GetAllByUser_Call) Run(run func(ctx context.Context
 	return _c
 }
 
-func (_c *WithdrawRepository_GetAllByUser_Call) Return(_a0 []*entity.Withdraw, _a1 error) *WithdrawRepository_GetAllByUser_Call {
+func (_c *WithdrawRepository_GetAllByUser_Call) Return(_a0 []entity.Withdraw, _a1 error) *WithdrawRepository_GetAllByUser_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }

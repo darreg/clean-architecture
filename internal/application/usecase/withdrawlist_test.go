@@ -27,7 +27,7 @@ func TestWithdrawList(t *testing.T) {
 
 	userUUID := uuid.New()
 	processedAt := time.Now()
-	withdrawsMock := []*entity.Withdraw{
+	withdrawsMock := []entity.Withdraw{
 		{
 			ID:          uuid.New(),
 			UserID:      userUUID,
@@ -47,7 +47,7 @@ func TestWithdrawList(t *testing.T) {
 	tests := []struct {
 		name        string
 		args        *args
-		want        []*entity.Withdraw
+		want        []entity.Withdraw
 		wantErr     error
 		mockPrepare func(a *args) *m
 	}{

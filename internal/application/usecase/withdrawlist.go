@@ -13,7 +13,7 @@ func WithdrawList(
 	userID string,
 	withdrawRepository port.WithdrawAllByUserGetter,
 	userRepository port.UserGetter,
-) ([]*entity.Withdraw, error) {
+) ([]entity.Withdraw, error) {
 	userUUID, err := uuid.Parse(userID)
 	if err != nil {
 		return nil, err

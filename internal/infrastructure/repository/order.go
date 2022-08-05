@@ -44,7 +44,7 @@ func (o OrderRepository) Get(ctx context.Context, number string) (*entity.Order,
 	return &order, nil
 }
 
-func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error) {
+func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Order, error) {
 	rows, err := o.tx.QueryContext(ctx,
 		"SELECT number, user_id, status, accrual, uploaded_at, processed_at FROM orders WHERE user_id = $1", user.ID,
 	)
@@ -57,7 +57,7 @@ func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([
 
 	defer rows.Close()
 
-	orders := make([]*entity.Order, 0)
+	orders := make([]entity.Order, 0)
 	for rows.Next() {
 		var order entity.Order
 		var uploadedAt time.Time
@@ -73,7 +73,7 @@ func (o OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([
 			order.ProcessedAt = &processedAt.Time
 		}
 
-		orders = append(orders, &order)
+		orders = append(orders, order)
 	}
 
 	err = rows.Err()

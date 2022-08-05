@@ -57,7 +57,7 @@ func (w WithdrawRepository) GetWithdrawn(ctx context.Context, user *entity.User)
 	return float32(withdrawn.Float64), nil
 }
 
-func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error) {
+func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Withdraw, error) {
 	rows, err := w.tx.QueryContext(ctx,
 		"SELECT id, order_number, user_id, sum, processed_at FROM withdraws WHERE user_id = $1", user.ID,
 	)
@@ -70,7 +70,7 @@ func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User)
 
 	defer rows.Close()
 
-	withdraws := make([]*entity.Withdraw, 0)
+	withdraws := make([]entity.Withdraw, 0)
 	for rows.Next() {
 		var withdraw entity.Withdraw
 		var processedAt time.Time
@@ -81,7 +81,7 @@ func (w WithdrawRepository) GetAllByUser(ctx context.Context, user *entity.User)
 
 		withdraw.ProcessedAt = &processedAt
 
-		withdraws = append(withdraws, &withdraw)
+		withdraws = append(withdraws, withdraw)
 	}
 
 	err = rows.Err()

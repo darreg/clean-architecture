@@ -12,7 +12,7 @@ type WithdrawGetter interface {
 }
 
 type WithdrawAllByUserGetter interface {
-	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Withdraw, error)
+	GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Withdraw, error)
 }
 
 type Withdrawner interface {

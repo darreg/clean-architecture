@@ -146,15 +146,15 @@ func (_c *OrderRepository_Get_Call) Return(_a0 *entity.Order, _a1 error) *OrderR
 }
 
 // GetAllByUser provides a mock function with given fields: ctx, user
-func (_m *OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error) {
+func (_m *OrderRepository) GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Order, error) {
 	ret := _m.Called(ctx, user)
 
-	var r0 []*entity.Order
-	if rf, ok := ret.Get(0).(func(context.Context, *entity.User) []*entity.Order); ok {
+	var r0 []entity.Order
+	if rf, ok := ret.Get(0).(func(context.Context, *entity.User) []entity.Order); ok {
 		r0 = rf(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*entity.Order)
+			r0 = ret.Get(0).([]entity.Order)
 		}
 	}
 
@@ -187,7 +187,7 @@ func (_c *OrderRepository_GetAllByUser_Call) Run(run func(ctx context.Context, u
 	return _c
 }
 
-func (_c *OrderRepository_GetAllByUser_Call) Return(_a0 []*entity.Order, _a1 error) *OrderRepository_GetAllByUser_Call {
+func (_c *OrderRepository_GetAllByUser_Call) Return(_a0 []entity.Order, _a1 error) *OrderRepository_GetAllByUser_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }

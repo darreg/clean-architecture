@@ -11,7 +11,7 @@ type OrderGetter interface {
 }
 
 type OrderAllByUserGetter interface {
-	GetAllByUser(ctx context.Context, user *entity.User) ([]*entity.Order, error)
+	GetAllByUser(ctx context.Context, user *entity.User) ([]entity.Order, error)
 }
 
 type OrderAdder interface {
